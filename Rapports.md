@@ -1,6 +1,6 @@
 cd# Rapports hebdomadaires -- à faire en fin de séance
 ## Mardi 3/10/2017
-#http://www.bibnum.education.fr/mathematiques/analyse/le-probleme-de-sturmliouville
+http://www.bibnum.education.fr/mathematiques/analyse/le-probleme-de-sturmliouville
 =======
 http://www.bibnum.education.fr/mathematiques/analyse/le-probleme-de-sturmliouville  
 https://maths.ucd.ie/~ekashdan/page2/SLP.pdf  
