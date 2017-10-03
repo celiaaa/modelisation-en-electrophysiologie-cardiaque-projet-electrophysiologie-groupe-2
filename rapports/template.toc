@@ -1,0 +1,5 @@
+\select@language {french}
+\contentsline {chapter}{\numberline {1}Une premi\IeC {\`e}re section, par exemple une introduction}{5}{chapter.1}
+\contentsline {chapter}{\numberline {2}Une deuxi\IeC {\`e}me section}{7}{chapter.2}
+\contentsline {section}{\numberline {2.1}Sous-section mod\IeC {\'e}lisation}{7}{section.2.1}
+\contentsline {section}{\numberline {2.2}Ce qu'on cherche \IeC {\`a} faire}{7}{section.2.2}
