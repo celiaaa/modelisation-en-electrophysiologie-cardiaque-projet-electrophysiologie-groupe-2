@@ -31,6 +31,14 @@ Conditions aux limites problème de Sturm-Trouville du type :
 c1y(a) + c2y'(a) = 0 ; c1y(b) + c2y'(b) = 0
 on prendra c1=d1=0
 
+si a(x) dépend de x on aura comme conditions limites
+pour x appartenant à l'interval [a,b] avec a<b on a ;
+
+partial_xu =h*u=0 si x=a;
+partial_xu + H*u=0 si x=b;   et on a h,H appartienne à ]0,+infini[
+u(0,x)=g(x)
+il faudra aussi que a(x)>0;
+
 ## Mardi 17/10/2017
 ## Mardi 14/11/2017
 ## Mardi 21/11/2017
