@@ -14,13 +14,6 @@ https://www.math.univ-toulouse.fr/~rondep/CoursTD/polyic2.pdf
 http://www.math.ubc.ca/~israel/m316/nhslp.pdf  
 
 
-Méthodes des différences finis pour la résolution des équations SL:  
-
-http://www.sciencedirect.com/science/article/pii/089812219390323N  
-http://www.ams.org/journals/mcom/1969-23-108/S0025-5718-1969-0258291-7/S0025-5718-1969-0258291-7.pdf  
-
-
-
 1.si a(x) est égal à une constante k on aura une equation de la chaleur non homogène et on a comme condition au bord:
 u(t,0)=u⁰
 u(t,1)=u¹
@@ -37,7 +30,14 @@ pour x appartenant à l'interval [a,b] avec a<b on a ;
 partial_xu -h*u=0 si x=a;
 partial_xu + H*u=0 si x=b;   et on a h,H appartienne à ]0,+infini[
 u(0,x)=g(x)
-il faudra aussi pour résoudre que a(x)>0 pour résoudre l'edp ;
+il faudra aussi pour résoudrel'edp  que a(x)>0  ;
+
+
+2.Méthodes des différences finis pour la résolution des équations SL:
+
+http://www.sciencedirect.com/science/article/pii/089812219390323N  
+http://www.ams.org/journals/mcom/1969-23-108/S0025-5718-1969-0258291-7/S0025-5718-1969-0258291-7.pdf  
+
 
 ## Mardi 17/10/2017
 ## Mardi 14/11/2017
