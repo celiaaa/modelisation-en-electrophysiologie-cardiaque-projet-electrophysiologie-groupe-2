@@ -1,0 +1,6 @@
+0.  				#xmin
+1.  				#xmax
+50				#N
+100				#nombre d'iterations
+10.				#T
+1000				#time_to_save
