@@ -13,14 +13,16 @@ def alpha(x):
 
 def initialise_Jn(pas_x,pas_t,dimension,a): # a est la borne inférieur de l'intervalle
     resultat=np.zeros((dimension+1,dimension+1),dtype='d')
+    b=(pas_t)/(pas_x*pas_x)
     for i in np.arange(1,dimension,1):
-        resultat[i][i]=1-((pas_t)/pas_x*pas_x)*(alpha(a+(i-0.5)*pas_x)+ alpha(a+(i+0.5)*pas_x))
-        resultat[i][i-1]=(pas_t)/((pas_x)*(pas_x)) * alpha(a+(i-0.5)*pas_x)
-        resultat[i][i+1]= (pas_t)/((pas_x)*(pas_x)) * alpha(a+(i+0.5)*pas_x)
-    resultat[0][0]=1-2*((pas_t)/(pas_x*pas_x))*alpha(a+pas_x/2)
-    resultat[0][1]=2*((pas_t)/(pas_x*pas_x))*alpha(a+pas_x/2)
-    resultat[dimension][dimension-1]=2*(pas_t/pas_x*pas_x)*alpha(a+(dimension-0.5)*pas_x)
-    resultat[dimension][dimension]=1-2*(pas_t/pas_x*pas_x)*alpha(a+(dimension-0.5)*pas_x)
+        pi=alpha( a+(i-0.5)*pas_x ) + alpha( a+(i+0.5)*pas_x )
+        resultat[i][i]=1-b*pi
+        resultat[i][i-1]=b * alpha(a+(i-0.5)*pas_x)
+        resultat[i][i+1]= b * alpha(a+(i+0.5)*pas_x)
+    resultat[0][0]=1-2*b*alpha(a+(pas_x)/2)
+    resultat[0][1]=2*b*alpha(a+pas_x/2)
+    resultat[dimension][dimension-1]=2*b*alpha(a+(dimension-0.5)*pas_x)
+    resultat[dimension][dimension]=1-2*b*alpha(a+(dimension-0.5)*pas_x)
     return resultat
 
 def f(t,x):
@@ -35,7 +37,7 @@ def init_Fn(t,a,pas_x,dimension):
 
 
 def init_uo(x):
-    resultat=1 # pour commencer
+    resultat=x*x+8 # pour commencer
     return resultat
 
 def init_U(a,dimension,pas_x):
@@ -48,7 +50,7 @@ def prod_mat_creuse(A,x,dimension):
     resultat=np.zeros((1,dimension+1),dtype='d')
     n=dimension
     resultat[0][0]=A[0][0]*x[0][0]+A[0][1]*x[0][1]
-    resultat[0][n]=A[n-1][n-1]*x[0][n-1]+A[n-1][n-1]*x[0][n-1]
+    resultat[0][n]=A[n][n-1]*x[0][n-1]+A[n][n]*x[0][n]
     for i in np.arange(1,n,1):
         resultat[0][i]=A[i][i-1]*x[0][i-1]+A[i][i]*x[0][i]+A[i][i+1]*x[0][i+1]
     return resultat   
