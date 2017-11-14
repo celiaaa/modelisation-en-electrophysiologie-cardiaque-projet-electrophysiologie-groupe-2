@@ -1,0 +1,122 @@
+\documentclass[a4paper,12pt,twoside]{report}
+
+\usepackage[french]{babel}  % Pour le français
+\usepackage[utf8]{inputenc} % Pour taper les caractères accentués
+\usepackage[T1]{fontenc} %Not needed on school computers
+
+\usepackage{amsmath}  % Ces trois paquets donnent accès à 
+\usepackage{amsfonts} % des symboles et formulations 
+\usepackage{amstext}  % mathématiques
+\usepackage{hyperref} % Permet de faire automatiquement des liens dans les
+                      % documents
+\usepackage{graphicx} % Permet d'insérer des images
+\DeclareGraphicsExtensions{.png} % Mettre ici la liste des extensions des
+                                 % fichiers images
+
+% On peut choisir la police en utilisant un paquet 
+%\usepackage{newcent}
+\usepackage{lmodern}
+%\usepackage{cmbright} % Computer Modern Bright
+
+% Une des nombreuses manière de modifier les marges par défaut
+\usepackage{geometry}
+\geometry{vmargin=2cm,hmargin=2.5cm,nohead}
+
+% If si units are needed : \usepackage{siunitx}
+
+% On peut redéfinir certaines longueurs, par exemple l'espacement entre les
+% paragraphes:
+\setlength{\parskip}{0.25cm}
+
+% Quelques définitions 
+\def \rr {{\mathbb R}} % L'ensemble R
+\def \cc {{\mathbb C}} % L'ensemble C
+\def \nn {{\mathbb N}} % L'ensemble N
+\def \zz {{\mathbb Z}} % L'ensemble Z
+
+% Les informations de la page de titre (page de titre séparée pour un 'report').
+\title{
+\vspace*{1in}
+\textbf{Electrocardiogramme}}
+
+\author{Rémi Hernandez\\
+        Romuald\\
+        Célia\\
+        Amandine\\
+		\vspace*{0.5in} \\		
+		Tuteur : Y.Courdiere \\	
+		\vspace*{0.5in} \\		
+		Université de Bordeaux\\		
+       } 
+%--------------------Make usable space all of page
+\setlength{\oddsidemargin}{0in} \setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}     \setlength{\headsep}{-.25in}
+\setlength{\textwidth}{6.5in}   \setlength{\textheight}{8.5in}
+%--------------------Indention
+\setlength{\parindent}{1cm}
+
+
+% \thanks: permet de mettre une note de bas de page pour l'auteur
+% \href: insère un lien, ici vers l'application 'mailto'
+% \tt: police monospace
+\date{\today} % \today pour la date courante 
+
+\cleardoublepage
+
+\begin{document}
+
+\maketitle % Page de titre automatique à partir des infos ci-dessus
+
+% La commande cleardoublepage est utilisée pour s'assurer que la page suivante
+% est une page de droite lorque l'on imprime recto-verso.
+
+
+
+\pagebreak
+\hspace{0pt}
+
+\vfill
+\hspace{0pt}
+\pagebreak
+
+
+
+
+\cleardoublepage
+\tableofcontents % Table des matière automatique à partir des chapitres,
+                 % sections, etc du document
+
+
+
+
+\chapter{Deuxième partie: programmation dans un cas simplifié} 
+
+2) dans le cas ($a(x) = 1$) on a l'équation de la chaleur. \\
+Situation où l'on peut calculer des solutions analytiques: \\
+
+Il y a deux cas: \\
+
+cas 1:\\ 
+$f(x,t) = 0$ \\
+la solution est la fonction u définie par : \\
+$$ u(x,t) = \sum_{k \geq 1} b_k sin(k \pi x) exp(-k^2 \pi^2 t) $$ 
+
+cas 2:\\
+$f(x,t) \neq 0$ \\
+Ici, f(x,t) est à valeurs dans un espace de Hilbert. $ f \in L^2 $. \\
+u sera de la forme: \\
+$$ u(x,t) = \int_{- \infty}^{+ \infty} E(x-y,t)u_0(y)dy + \int_{-\infty}^{+\infty} \int_{0}^{t} E(x-y,t-s)f(y,s)dyds$$
+
+$$ 
+E(x,t) = \left\{ 
+	\begin{array}{ll}
+		\frac{1}{\sqrt{4 \pi t}} exp(\frac{x^2}{4t}) \mbox{si } t>0 \\
+		 0 pout t \leqslant 0 & \m}
+	\end{array}
+\right.
+$$ $$
+
+
+
+
+\end{document}
