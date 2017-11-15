@@ -1,0 +1,2 @@
+\select@language {french}
+\contentsline {chapter}{\numberline {1}Deuxi\IeC {\`e}me partie: programmation dans un cas simplifi\IeC {\'e}}{4}{chapter.1}
