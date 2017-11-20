@@ -10,14 +10,14 @@ import module as mod
 
 #Initialisation parametres
 CFL = 1.
-t_fin = 1. 
+t_fin = 5. 
 nx = 30
-X = np.linspace(0,1,nx+1)
+X = np.linspace(0.,3.,nx+1)
 dx = X[1]-X[0]
 
 dt = CFL*0.5*dx*dx
 nt = int(floor(t_fin/dt))
-T =  np.linspace(0,t_fin,nt)
+T =  np.linspace(0.,t_fin,nt)
 
 u = np.zeros((np.size(X),np.size(T)))
 
@@ -25,17 +25,18 @@ u[:,0] = mod.u0(X) #On initialise u pour t=0
 
 A = mod.init_A(nx,dx) #initialisation de A
 
-M = np.eye(nx+1) + (dt/dx/dx)*A #Matrice M à inverser pour résoudre
+# Le schema : M.u^k = J.u^k-1
 
-# On calcule la première itération avec euler explicite
+M = np.eye(nx+1) + (dt/(2*dx*dx))*A 
+J = np.eye(nx+1) - (dt/(2*dx*dx))*A 
+
 a,b,c = mod.init_abc(M,nx) #récupère les diago de M dans des vecteurs
-d = u[:,0]
-u[:,1] = np.transpose(mod.TDMAsolver(a,b,c,d))
 
-for k in range(1,nt-1):
+for k in range(1,nt):
+
+    d = J.dot(u[:,k-1])
     
-    u[:,k+1] = u[:,k-1] - 2*(dt/dx/dx)*A.dot(u[:,k]) 
-
+    u[:,k] = np.transpose(mod.TDMAsolver(a,b,c,d))
 
 sx,st = sp.meshgrid(X,T)
 

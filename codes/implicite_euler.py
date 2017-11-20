@@ -10,7 +10,7 @@ import module as mod
 
 #Initialisation parametres
 CFL = 1.
-t_fin = 1. 
+t_fin = 5. 
 nx = 30
 X = np.linspace(0,1,nx+1)
 dx = X[1]-X[0]
@@ -25,16 +25,18 @@ u[:,0] = mod.u0(X) #On initialise u pour t=0
 
 A = mod.init_A(nx,dx) #initialisation de A
 
+# plu = mod.fact_LU(A) #Factorisation LU
+
 M = np.eye(nx+1) + (dt/dx/dx)*A #Matrice M à inverser pour résoudre
 
-# On calcule la première itération avec euler explicite
 a,b,c = mod.init_abc(M,nx) #récupère les diago de M dans des vecteurs
-d = u[:,0]
-u[:,1] = np.transpose(mod.TDMAsolver(a,b,c,d))
 
-for k in range(1,nt-1):
+for k in range(1,nt):
+
+    d = u[:,k-1]
     
-    u[:,k+1] = u[:,k-1] - 2*(dt/dx/dx)*A.dot(u[:,k]) 
+    u[:,k] = np.transpose(mod.TDMAsolver(a,b,c,d))
+    # u[:,k] = sp.linalg.lu_solve(plu,d)
 
 
 sx,st = sp.meshgrid(X,T)

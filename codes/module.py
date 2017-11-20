@@ -2,7 +2,7 @@
 
 
 import numpy as np
-
+import scipy.linalg as sp
 
 def u0(x): #u(0,x)=u0(x) on ]0,1[
 
@@ -16,8 +16,20 @@ def u0(x): #u(0,x)=u0(x) on ]0,1[
 
 def alpha(x):
 
-    return 0.01
+    #alpha = np.exp(-x*x/2.)/(np.sqrt(2*np.pi))
+    alpha = 0.01
+    
+    return alpha
 
+def fact_LU(A):
+    print 'LU factorisation:'
+    plu = sp.lu_factor(A)
+    # if np.all(np.dot(P,np.dot(L,U))==A):
+    #     print 'Done correctly'
+    # else:
+    #     print 'Not correct'
+    
+    return plu
 
 ## Tri Diagonal Matrix Algorithm(a.k.a Thomas algorithm) solver
 def TDMAsolver(a, b, c, d):
@@ -70,4 +82,3 @@ def init_abc(A,n): #return 3 vectors of size n+1 wich contains the diagonals of 
     b[n] = A[n,n]
 
     return a,b,c
-
