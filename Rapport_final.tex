@@ -88,8 +88,36 @@
 
 
 
+\chapter{Étude théorique} 
 
-\chapter{Deuxième partie: programmation dans un cas simplifié} 
+L'électrophysiologie permet de modéliser la propagation de différentes ondes dans le cœur. \\
+Pour cela nous allons utiliser cette équation:\\
+
+$$\partial_t u(x,t) - \partial_x(a(x) \partial u(x,t)) = f(t,x)$$
+
+Afin de résoudre cette équation il faut certaines conditions initiales et aux bords. Nos recherches dans différents livres et articles nous permettent alors de déduire les conditions suivantes: \\
+\\
+$$ 
+\left\{ 
+	\begin{array}{ll}
+		\partial_t u(x,t) - \partial_x(a(x) \partial u(x,t)) = f(t,x) \\
+		\partial_x u(x,t) = 0 \ sur \  \partial \Omega\\
+		u(0,x) = u_0(x) \ t \in [0,T]
+		
+	\end{array}
+\right. 
+$$
+
+
+Il est nécessaire que $a(x) > 0$, afin que le phénomène ne soit pas réversible! En effet, on ne peut inverser la diffusion de la chaleur. \\ 
+On remarque par ailleurs que l'on a l'équation chaleur pour le cas $a(x) = 1$. On résoudra cette équation dans le chapitre 2.
+
+
+
+
+
+
+\chapter{programmation dans un cas simplifié} 
 
 2) Situation où l'on peut calculer des solutions analytiques: \\
 dans le cas ($a(x) = 1$) on a l'équation de la chaleur. De plus avec nos conditions aux bords, ie les dérivées sont nulles, on a deux cas: \\
