@@ -8,7 +8,7 @@ reload (sys)
 sys.setdefaultencoding('utf8')
 
 def alpha(x):
-    resultat=1  # pour répondre à la question en prenant alpha=1
+    resultat=0.01  # pour répondre à la question en prenant alpha=1
     return resultat
 
 def initialise_Jn(pas_x,pas_t,dimension,a): # a est la borne inférieur de l'intervalle
@@ -26,7 +26,7 @@ def initialise_Jn(pas_x,pas_t,dimension,a): # a est la borne inférieur de l'int
     return resultat
 
 def f(t,x):
-    resultat=0 # on commence avec 0
+    resultat=0# on commence avec 0
     return resultat
 
 def init_Fn(t,a,pas_x,dimension):
@@ -37,7 +37,7 @@ def init_Fn(t,a,pas_x,dimension):
 
 
 def init_uo(x):
-    resultat=x*x+8 # pour commencer
+    resultat=np.cos(np.pi*x) # pour commencer
     return resultat
 
 def init_U(a,dimension,pas_x):
