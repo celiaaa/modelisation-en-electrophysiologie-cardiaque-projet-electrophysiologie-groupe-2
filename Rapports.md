@@ -38,9 +38,18 @@ il faudra aussi pour résoudre l'edp  que a(x)>0  ;
 http://www.sciencedirect.com/science/article/pii/089812219390323N  
 http://www.ams.org/journals/mcom/1969-23-108/S0025-5718-1969-0258291-7/S0025-5718-1969-0258291-7.pdf  
 
-#test ssh un  truc pour tester git push
 
 ## Mardi 17/10/2017
+compréhension du sujet, recherche des conditions initiales et aux bords afin de résoudre l'équation de la chaleur qui correspond à notre sujet.
+Rédaction des codes
+
 ## Mardi 14/11/2017
+Recherche de la solution exacte.
+Correction code et rédaction du rapport final
+
 ## Mardi 21/11/2017
+Modification du code afin de le simplifier.
+Comparaison de la solution approchée, avec la méthode d'Euler explicite, et de la solution exacte.
+Rédaction du rapport final
+
 ## Mardi 28/12/2017
