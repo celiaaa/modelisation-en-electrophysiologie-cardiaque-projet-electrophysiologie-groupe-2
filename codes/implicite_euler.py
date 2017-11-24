@@ -6,39 +6,33 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from mpl_toolkits.mplot3d import Axes3D
 from math import ceil,floor
+from scipy.sparse.linalg import splu
+
 import module as mod
 
 #Initialisation parametres
-CFL = 1.
-t_fin = 5. 
-nx = 30
-X = np.linspace(0,1,nx+1)
-dx = X[1]-X[0]
+a,b = 0.,1.
+T=0.5
 
-dt = CFL*0.5*dx*dx
-nt = int(floor(t_fin/dt))
-T =  np.linspace(0,t_fin,nt)
+N=30
+dx = (b-a)/N
+dt=0.5*dx*dx
+P=int(T/dt)
 
-u = np.zeros((np.size(X),np.size(T)))
+T = np.linspace(0,T,P+1)
+X = np.linspace(a,b,N+1)
+u = np.zeros((N+1,P+1))
 
-u[:,0] = mod.u0(X) #On initialise u pour t=0
-
-A = mod.init_A(nx,dx) #initialisation de A
-
-# plu = mod.fact_LU(A) #Factorisation LU
-
-M = np.eye(nx+1) + (dt/dx/dx)*A #Matrice M à inverser pour résoudre
-
-a,b,c = mod.init_abc(M,nx) #récupère les diago de M dans des vecteurs
-
-for k in range(1,nt):
-
-    d = u[:,k-1]
-    
-    u[:,k] = np.transpose(mod.TDMAsolver(a,b,c,d))
-    # u[:,k] = sp.linalg.lu_solve(plu,d)
+u[:,0] = mod.u_0(X)
+M = mod.M_impl(dx,dt,N,a)
+B = splu(M)                     # Factorisation LU
 
 
+for n in np.arange(1,P+1,1):
+    u[:,n] = B.solve(u[:,n-1])
+
+
+    # Affichage des résultats
 sx,st = sp.meshgrid(X,T)
 
 fig = plt.figure()

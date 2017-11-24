@@ -2,34 +2,104 @@
 
 
 import numpy as np
-import scipy.linalg as sp
+import scipy.sparse as sp
 
-def u0(x): #u(0,x)=u0(x) on ]0,1[
-
-    r = np.cos(np.pi*x)
-    # r = 0*x
-    # for i in range(0,len(x)):
-    #     if 0.4<x[i]<0.6:
-    #         r[i] = 10.
-
-    return r
 
 def alpha(x):
+    "Coefficient alpha(x) de l'équation"
+    return 1.*(1.+0.*x) # pour répondre à la question en prenant alpha=0.01
 
-    #alpha = np.exp(-x*x/2.)/(np.sqrt(2*np.pi))
-    alpha = 0.01
-    
-    return alpha
+def f(t,x):
+    resultat=0# on commence avec 0
+    return resultat
 
-def fact_LU(A):
-    print 'LU factorisation:'
-    plu = sp.lu_factor(A)
-    # if np.all(np.dot(P,np.dot(L,U))==A):
-    #     print 'Done correctly'
-    # else:
-    #     print 'Not correct'
+def u_0(x):
+    resultat=np.cos(np.pi*x) # pour commencer
+    return resultat
+
+def u_ex(t,x):
+    return np.cos(np.pi*x)*np.exp(-(np.pi)**2*t)
+
+
+
+def init_Fn(t,a,pas_x,dimension):
+    resultat=np.zeros((1,dimension+1),dtype='d')
+    for i in np.arange(0,dimension+1,1):
+        resultat[0][i]=f(t,a+i*pas_x)
+    return resultat
+
+
+# -------fonction pour le schéma d'euler implicite
+
+def M_impl(dx,dt,n,a):
+    """M_impl(dx,dt,n)
     
-    return plu
+    Renvoie la matrice M = Id + (dt/dx^2)*A ou A = matrice de discrétisation de
+    -d_xx(u), sur un intervalle [a,b] découpé en n morceaux de tailles
+    dx. Il y a donc n+1 points. La matrice est creuse (tridiagonale) de
+    taille n+1 x n+1. Avec les conditions limites d_x(u)=0
+"""
+    # La matrice est M = Id + dt*A
+    return sp.identity(n+1,format="csc") + dt*A(dx,n,a)
+
+
+def A(dx,n,a):
+    """A(dx,n,a)
+    
+    Renvoie la matrice A de la discrétisation par DF de -d_xx(u), sur un
+    intervalle [a,b] découpé en n morceaux de tailles dx. Il y a donc
+    n+1 points. La matrice est creuse (tridiagonale) de taille n+1 x
+    n+1. Avec les conditions limites d_x(u)=0
+"""
+    # La matrice est
+    #  2*a_{1/2}   -2*a_{1/2}
+    #  -a_{1/2}  a_{1/2}+a_{3/2} -a_{3/2}
+    #              -a_{3/2}         .         .
+    #                               .         .      .
+    #                                       -2*a_{n-1/2}  2a_{n-1/2}
+    x_ip12 = a + dx*(0.5+np.arange(n)) # x_{i+1/2} i = 0 à n-1
+    a_ip12 = alpha(x_ip12)
+    diag_0 = np.hstack([a_ip12,0]) + np.hstack([0,a_ip12])
+    diag_0[0] = diag_0[0] + a_ip12[0]
+    diag_0[n] = diag_0[n] + a_ip12[n-1]
+    diag_m1 = -a_ip12
+    diag_m1[n-1] = diag_m1[n-1] - a_ip12[n-1]
+    diag_p1 = -a_ip12
+    diag_p1[0] = diag_p1[0] - a_ip12[0]
+    return 1./dx**2 * sp.diags([diag_0,diag_m1,diag_p1],[0,-1,+1],format="csc") # dia ou csc ou csr
+
+
+# ------------ Foncitons pour la shcéma de Crank-Nicolson
+
+def M_CN(dx,dt,n,a):
+    """M_CN(dx,dt,n)
+    
+    Renvoie les matrices M = Id + (dt/2dx^2)*A et J = Id - (dt/2dx^2)*A ou A = matrice de discrétisation de
+    -d_xx(u), sur un intervalle [a,b] découpé en n morceaux de tailles
+    dx. Il y a donc n+1 points. La matrice est creuse (tridiagonale) de
+    taille n+1 x n+1. Avec les conditions limites d_x(u)=0
+"""
+    # Les matrices sont M = Id + (dt/2)*A et J = Id - (dt/2)*A 
+    return sp.identity(n+1,format="csc") + 0.5*dt*A(dx,n,a) , sp.identity(n+1,format="csc") - 0.5*dt*A(dx,n,a)
+
+
+
+
+# ------------ Pour la résolution du système linéaire Mx^k = x^k-1
+
+def init_abc(A,n): #return 3 vectors of size n+1 wich contains the diagonals of A. a and c (lower and upper diagonals) are completed with 0.
+
+    a = np.zeros((n+1,1))
+    b = np.zeros((n+1,1))
+    c = np.zeros((n+1,1))
+    for i in range(1,n):
+        a[i] = A[i,i-1]
+        b[i] = A[i,i]
+        c[i] = A[i,i+1]
+    b[0] = A[0,0]
+    b[n] = A[n,n]
+
+    return a,b,c
 
 ## Tri Diagonal Matrix Algorithm(a.k.a Thomas algorithm) solver
 def TDMAsolver(a, b, c, d):
@@ -54,31 +124,12 @@ def TDMAsolver(a, b, c, d):
     return xc
 
 
-def init_A(n,dx): #return an array size (n+1)x(n+1) (0:n,0:n)
-
-    A = np.zeros((n+1,n+1))
-    for i in range(1,n):
-        A[i,i] = alpha((i+0.5)*dx)+alpha((i-0.5)*dx)
-        A[i,i+1] = -1*alpha((i+0.5)*dx)
-        A[i,i-1] = -1*alpha((i-0.5)*dx)
-    A[0,0] = 2*alpha(0.5*dx)
-    A[n,n] = 2*alpha((n-0.5)*dx)
-    A[0,1] = -2*alpha(0.5*dx)
-    A[n,n-1] = -2*alpha((n-0.5)*dx)
+# def fact_LU(A):
+#     print 'LU factorisation:'
+#     plu = sp.lu_factor(A)
+#     # if np.all(np.dot(P,np.dot(L,U))==A):
+#     #     print 'Done correctly'
+#     # else:
+#     #     print 'Not correct'
     
-    return A
-
-
-def init_abc(A,n): #return 3 vectors of size n+1 wich contains the diagonals of A. a and c (lower and upper diagonals) are completed with 0.
-
-    a = np.zeros((n+1,1))
-    b = np.zeros((n+1,1))
-    c = np.zeros((n+1,1))
-    for i in range(1,n):
-        a[i] = A[i,i-1]
-        b[i] = A[i,i]
-        c[i] = A[i,i+1]
-    b[0] = A[0,0]
-    b[n] = A[n,n]
-
-    return a,b,c
+#     return plu
