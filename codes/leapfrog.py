@@ -9,13 +9,13 @@ from math import ceil,floor
 import module as mod
 
 #Initialisation parametres
-CFL = 1.
+CFL = 0.5
 t_fin = 1. 
 nx = 30
 X = np.linspace(0,1,nx+1)
 dx = X[1]-X[0]
 
-dt = CFL*0.5*dx*dx
+dt = CFL*dx*mod.alpha(0)
 nt = int(floor(t_fin/dt))
 T =  np.linspace(0,t_fin,nt)
 
