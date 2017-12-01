@@ -127,42 +127,47 @@ def TDMAsolver(a, b, c, d):
 
 # Minimal Model
 
-teta_v = 0.1
-teta_w = 0.13
-teta_v_m = 0.1
-teta_o = 0.005
+u0 = 0.
+v0 = 1.
+w0 = 1.
+s0 = 0.
 
-tau_v1_m = 80.
-tau_v2_m = 1.4506
+theta_v = 0.3
+theta_w = 0.13
+theta_v_m = 0.2
+theta_o = 0.006
+
+tau_v1_m = 75.
+tau_v2_m = 10.
 tau_v_p = 1.4506
-tau_w1_m = 70.
-tau_w2_m = 8.
+tau_w1_m = 6.
+tau_w2_m = 140.
 tau_w_p = 280.
 tau_s1 = 2.7342
-tau_s2 = 4.
-tau_fi = 0.078
-tau_o1 = 410.
-tau_o2 = 7.
-tau_so1 = 91.
-tau_so2 = 0.8
-tau_si = 3.3849
-tau_w_inf = 0.01
+tau_s2 = 2.
+tau_fi = 0.1
+tau_o1 = 470.
+tau_o2 = 6.
+tau_so1 = 40.
+tau_so2 = 1.2
+tau_si = 2.9013
+tau_w_inf = 0.0273
 
-w_inf_x = 0.5
+w_inf_x = 0.78
 
 
 k_s = 2.0994
-k_so = 2.1
+k_so = 2.
 k_w_m = 200.
 
 u_s = 0.9087
-u_so = 0.6
-u_u = 1.61
+u_so = 0.65
+u_u = 1.56
 u_w_m = 0.016
 
 
 def tau_v_m(u):
-    return (1.-np.heaviside(u-teta_v_m,0))*tau_v1_m + np.heaviside(u-teta_v_m,0)*tau_v2_m
+    return (1.-np.heaviside(u-theta_v_m,0))*tau_v1_m + np.heaviside(u-theta_v_m,0)*tau_v2_m
 
 
 def tau_w_m(u):
@@ -172,38 +177,45 @@ def tau_so(u):
     return tau_so1 + (tau_so2-tau_so1)*(np.tanh(k_so*(u-u_so)))/2.
 
 def tau_s(u):
-    return (1.-np.heaviside(u-teta_w,0))*tau_s1 + np.heaviside(u-teta_w,0)*tau_s2
+    return (1.-np.heaviside(u-theta_w,0))*tau_s1 + np.heaviside(u-theta_w,0)*tau_s2
 
 def tau_o(u):
-    return (1-np.heaviside(u-teta_o,0))*tau_o1 + np.heaviside(u-teta_o,0)*tau_o2
+    return (1-np.heaviside(u-theta_o,0))*tau_o1 + np.heaviside(u-theta_o,0)*tau_o2
 
 def v_inf(u):
-    v=0.
-    if u<teta_v_m:
-        v=1.
-    return v
-
+    return np.where(u<tau_v_m(u),1.,0.)
+    
 def w_inf(u):
-    return (1-np.heaviside(u-teta_o,0))*(1-u/t_w_inf)+np.heaviside(u-teta_o,0)*w_inf_x
+    return (1-np.heaviside(u-theta_o,0))*(1-u/tau_w_inf)+np.heaviside(u-theta_o,0)*w_inf_x
 
 
 def J_fi(u,v):
-    return -v*np.heaviside(u-teta_v,0)*(u-teta_v)*(u_u-u)/tau_fi
+    return -v*np.heaviside(u-theta_v,0)*(u-theta_v)*(u_u-u)/tau_fi
 
 def J_so(u):
-    return (u-u_o)*(1-np.heaviside(u-teta_w,0))/tau_o+np.heaviside(u-teta_w,0)/tau_so
+    return (u-u0)*(1-np.heaviside(u-theta_w,0))/tau_o(u)+np.heaviside(u-theta_w,0)/tau_so(u)
 
 def J_si(u,w,s):
-    return -np.heaviside(u-teta_w,0)*w*s/tau_si
+    return -np.heaviside(u-theta_w,0)*w*s/tau_si
 
-def V_mv(u):
+def U_mv(u):
     return 85.7*u - 84.
 
+def I(u,v,w,s):
+    return -(J_fi(u,v)+J_so(u)+J_si(u,w,s) )
 
-def g(u,v,w,s):
-    dv= (1-np.heaviside(u-teta_v,0))*(v_inf-v)/tau_v_m-np.heaviside(u-teta_v)*v/tau_v_p
-    dw= (1-np.heaviside(u-teta_w,0))*(w_inf-w)/tau_w_m-np.heaviside(u-teta_w,0)*w/tau_w_p
-    ds= ((1+np.tanh(k_s*(u-u_s)))/2 -s)/tau_s
-    return dv,dw,ds
+# Équations v,w,s
+def g_v(u,v,w,s):
+    return (1-np.heaviside(u-theta_v,0.))*(v_inf(u)-v)/(tau_v_m(u)) - np.heaviside(u-theta_v,0.)*v/tau_v_p
+def g_w(u,v,w,s):
+    return (1-np.heaviside(u-theta_w,0))*(w_inf(u)-w)/(tau_w_m(u)) - np.heaviside(u-theta_w,0)*w/tau_w_p
+def g_s(u,v,w,s):
+    return ((1+np.tanh(k_s*(u-u_s)))/2 -s)/(tau_s(u))
+ 
 
-
+def G(y):
+    u = y[0,:]
+    v = y[1,:]
+    w = y[2,:]
+    s = y[3,:]
+    return np.stack((I(u,v,w,s), g_v(u,v,w,s), g_w(u,v,w,s), g_s(u,v,w,s)))
