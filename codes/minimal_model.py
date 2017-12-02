@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import module as m
-import modele_bocf as bocf
 
 import scipy as sp
 import numpy as np
@@ -10,7 +9,7 @@ import matplotlib.colors as colors
 from mpl_toolkits.mplot3d import Axes3D
 from math import ceil,floor
 from scipy.sparse.linalg import splu
-from time import sleep
+
 
 # Initialisation des paramètres
 a,b = 0. , 1. # On modèlise sur le segment (0,1)
