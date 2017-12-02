@@ -3,6 +3,7 @@
 import numpy as np
 import schemas as g
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
 from scipy.integrate import odeint
 import sys
 from mpl_toolkits.mplot3d import Axes3D
@@ -13,7 +14,7 @@ sys.setdefaultencoding('utf8')
 a,b=0.,1.
 T=0.5
 
-N=30
+N = input("Quelle valeur pour N : ")
 
 dx=(b-a)/N
 
@@ -35,30 +36,38 @@ for n in np.arange(1,P+1,1):
 
     
 xx,tt = np.meshgrid(t,x)
-fig = plt.figure()
-ax = fig.add_subplot(111,projection='3d')
 
 z = g.u_ex(xx,tt)
 diff = 0*u
 for i in np.arange(0,P+1,1):
     diff[:,i] = np.abs(z[:,i]-u[:,i])
 
-surf = ax.plot_surface(xx,tt,diff,linewidth=0)
+print np.amax(diff)
+
+# Affichage des résulats
+
+# fig = plt.figure()
+# ax = fig.gca(projection='3d')
+
+# surf = ax.plot_surface(xx,tt,diff,linewidth=0)
 
 # ax.set_xlabel('X', fontsize = 12)
 # ax.set_ylabel('temps', fontsize = 12)
 # ax.set_zlabel('u', fontsize = 12)
+
+# --------Affiche la solution exacte
 # ax.set_title('Solution exacte',fontsize = 16)
+# surf = ax.plot_surface(xx,tt,z,linewidth=0, cmap='jet')
 
-# surf = ax.plot_surface(xx,tt,z,linewidth=0)
-
-# ax = fig.add_subplot(211,projection='3d')
-# ax.set_xlabel('X', fontsize = 12)
-# ax.set_ylabel('temps', fontsize = 12)
-# ax.set_zlabel('u', fontsize = 12)
+# --------Affiche la solution approchée
 # ax.set_title('Solution approchée', fontsize = 16)
-# surf = ax.plot_surface(xx,tt,u, linewidth=0)
-plt.show()
+# surf = ax.plot_surface(xx,tt,u,linewidth=0, cmap='jet')
+
+
+# norm = colors.Normalize(-1,1)
+# cb = fig.colorbar(surf,ax=ax)
+
+# plt.show()
 
 
 

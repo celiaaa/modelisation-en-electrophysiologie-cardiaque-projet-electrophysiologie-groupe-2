@@ -28,6 +28,16 @@ def init_Fn(t,a,pas_x,dimension):
         resultat[0][i]=f(t,a+i*pas_x)
     return resultat
 
+# Fonction pour le calcul de l'erreur absolue
+def erreur(u,t,x):              # Les entrées : matrice "grille" temps et espace (meshgrid)
+    xx,tt = np.meshgrid(t,x)
+    z = u_ex(xx,tt)
+    diff = 0.*u
+    for i in np.arange(0,t.size,1):
+        diff[:,i] = np.abs(z[:,i]-u[:,i])
+    return np.amax(diff)
+  
+    
 
 # -------fonction pour le schéma d'euler implicite
 
