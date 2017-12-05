@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import module as m
+import model as m
 
 import scipy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
 t=500.
-P = 100000
+P = 13680
 
 T = np.linspace(0.,t,P+1)
 dt = T[1]-T[0]
@@ -20,7 +20,7 @@ y[2,0] = 1.
 y[3,0] = 0.
 
 for n in np.arange(0,P,1):
-    y[:,n+1] = y[:,n] + dt*m.G(y[:,n],n*dt)
+    y[:,n+1] = y[:,n] + dt*m.G(y[:,n],n*dt,0.)
 
 y[0,:] = m.U_mv(y[0,:])
 
