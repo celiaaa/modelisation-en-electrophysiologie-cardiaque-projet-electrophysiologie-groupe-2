@@ -13,10 +13,10 @@ from scipy.sparse.linalg import splu
 
 # Initialisation des paramètres
 a,b = 0. , 1. # On modèlise sur le segment (0,1)
-t = 1.
+t = 5.
 D = 1.e-3
 
-N=10
+N=50
 dx = (b-a)/float(N)
 dt = dx*dx
 P = int(t/dt)
@@ -29,7 +29,7 @@ y1 = np.zeros((4,N+1))
 
 A = D*m.A(dx,N,a)
 
-M = m.M_impl(dx,dt,N,a)         # Matrice du schéma Euler Implicite
+M,J = m.M_CN(dx,dt,N,a)         # Matrice du schéma Euler Implicite
 B = splu(M)                     # Factorisation LU
 
 # Conditions initiales
@@ -44,9 +44,9 @@ U[0,:] = y0[0,:]
 S = np.zeros((3,P+1))
 
 for n in np.arange(1,P+1,1):
-    y1 = y0 + dt*m.G(y0)
+    y1 = y0 + dt*m.G(y0,(n-1)*dt)
 
-    y1[0,:] = B.solve(y1[0,:])
+    y1[0,:] = B.solve(J.dot(y1[0,:]))
     y0 = y1
     
     U[n,:] = y0[0,:]
