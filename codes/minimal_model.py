@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import module as m
+import model as m
 
 import scipy as sp
 import numpy as np
@@ -9,16 +9,17 @@ import matplotlib.colors as colors
 from mpl_toolkits.mplot3d import Axes3D
 from math import ceil,floor
 from scipy.sparse.linalg import splu
-
+from scipy.sparse import csc_matrix , diags
 
 # Initialisation des paramètres
 a,b = 0. , 1. # On modèlise sur le segment (0,1)
-t = 1.
+t = 20.
 D = 1.e-3
 
-N=10
+N=50
 dx = (b-a)/float(N)
 dt = dx*dx
+print "dt : ",dt
 P = int(t/dt)
 
 T = np.linspace(0.,t,P+1)
@@ -29,7 +30,7 @@ y1 = np.zeros((4,N+1))
 
 A = D*m.A(dx,N,a)
 
-M = m.M_impl(dx,dt,N,a)         # Matrice du schéma Euler Implicite
+M,J = m.M_CN(dx,dt,N,a)         # Matrice du schéma Euler Implicite
 B = splu(M)                     # Factorisation LU
 
 # Conditions initiales
@@ -44,9 +45,9 @@ U[0,:] = y0[0,:]
 S = np.zeros((3,P+1))
 
 for n in np.arange(1,P+1,1):
-    y1 = y0 + dt*m.G(y0)
+    y1 = y0 + dt*m.G(y0,(n-1)*dt,X)
 
-    y1[0,:] = B.solve(y1[0,:])
+    y1[0,:] = B.solve(J.dot(y1[0,:]))
     y0 = y1
     
     U[n,:] = y0[0,:]

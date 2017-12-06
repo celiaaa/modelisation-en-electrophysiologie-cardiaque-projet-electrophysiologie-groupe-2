@@ -211,8 +211,15 @@ def J_si(u,w,s):
 def U_mv(u):
     return 85.7*u - 84.
 
-def I(u,v,w,s):
-    return -(J_fi(u,v)+J_so(u)+J_si(u,w,s) )
+def I_app(t):
+    
+    if 4.9<t<4.91:
+        return 50.
+    else:
+        return 0.
+
+def I(u,v,w,s,t):
+    return -(J_fi(u,v)+J_so(u)+J_si(u,w,s) ) + I_app(t)
 
 # Équations v,w,s
 def g_v(u,v,w,s):
@@ -223,9 +230,14 @@ def g_s(u,v,w,s):
     return ((1+np.tanh(k_s*(u-u_s)))/2 -s)/(tau_s(u))
  
 
-def G(y):
-    u = y[0,:]
-    v = y[1,:]
-    w = y[2,:]
-    s = y[3,:]
-    return np.stack((I(u,v,w,s), g_v(u,v,w,s), g_w(u,v,w,s), g_s(u,v,w,s)))
+def G(y,t):
+    # u = y[0,:]
+    # v = y[1,:]
+    # w = y[2,:]
+    # s = y[3,:]
+    u = y[0]
+    v = y[1]
+    w = y[2]
+    s = y[3]
+    
+    return np.stack((I(u,v,w,s,t), g_v(u,v,w,s), g_w(u,v,w,s), g_s(u,v,w,s)))
