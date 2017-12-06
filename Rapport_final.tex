@@ -117,21 +117,19 @@ On remarque par ailleurs que l'on a l'équation chaleur pour le cas $a(x) = 1$. 
 
 
 
-\chapter{programmation dans un cas simplifié} 
+
 
 2) Situation où l'on peut calculer des solutions analytiques: \\
-dans le cas ($a(x) = 1$) on a l'équation de la chaleur. De plus avec nos conditions aux bords, ie les dérivées sont nulles, on a deux cas: \\
+dans le cas ($a(x) = 1$) on a l'équation de la chaleur. De plus avec nos conditions aux bords, ie les dérivées sont nulles, on a deux cas, $ f(x) \neq 0$ ou $f(x) = 0$. Ici, on prend le cas où $f(x) = 0$: \\
  
 
 
-cas 1:\\ 
-$f(x,t) = 0$ \\
 la solution est la fonction u définie par : \\
 $$ u(x,t) =  cos(k \pi x) exp(-k^2 \pi^2 t) $$ 
 
 
 
-Résolution du cas 1: \\
+Résolution du cas: \\
 Nous allons résoudre le système par la méthode de séparation des variables.\\
 On pose u(x,t) = f(x)g(t)\\
 de ce fait: 
@@ -156,21 +154,7 @@ $$-P \sqrt{|c|} sin(x \sqrt{|c|}) = 0 \Rightarrow \sqrt{|c|}= k \pi \ \forall k 
 
 
 
-cas 2:\\
-$f(x,t) \neq 0$ \\
-Ici, f(x,t) est à valeurs dans un espace de Hilbert. $ f \in L^2 $. \\
-u sera de la forme: \\
-$$ u(x,t) = \int_{- \infty}^{+ \infty} E(x-y,t)u_0(y)dy + \int_{-\infty}^{+\infty} \int_{0}^{t} E(x-y,t-s)f(y,s)dyds$$
-
-$$ 
-E(x,t) = \left\{ 
-	\begin{array}{ll}
-		\frac{1}{\sqrt{4 \pi t}} exp(\frac{-x^2}{4t}) \mbox{ si } t>0 \\
-		 0 si t \leq 0  
-	\end{array}
-\right. 
-$$
-
+\chapter{programmation dans un cas simplifié} 
 \section{Schémas numériques pour la résolution}
 
 Pour la résolution de cette équation, on utilise un maillage uniforme avec un pas de $\Delta t$ en temps et $\Delta x$ en espace. \\
@@ -224,6 +208,25 @@ f(x_N,t_j)
 
 \smallbreak
 
+$$f(x + \Delta x, t) = f(x,t) + \Delta x \partial_x f(x,t) + \frac{(\Delta x)^2}{2} \partial_{xx} ^2 f(x,t) + \theta (\Delta x^3) $$ \\
+
+$$f(x - \Delta x, t) = f(x,t) - \Delta x \partial_x f(x,t) + \frac{(\Delta x)^2}{2} \partial_{xx} ^2 f(x,t) + \theta (\Delta x^3) $$ \\
+
+$$f(x + \Delta x, t) -f(x - \Delta x, t) = 2 \Delta x \partial_x f(x,t) + \theta (\Delta x^3) $$ \\
+$$\frac{f(x + \Delta x, t) -f(x - \Delta x, t)}{2 \Delta x} = \partial_x f(x,t) + \theta (\Delta x^2)$$ \\
+$$\partial_x f_k ^n = \frac{f_{k+1} ^n - f_{k-1} ^n}{2 \Delta x}$$ \\
+
+$$ \partial_x(a(x) \partial u(x,t)) = \frac{1}{ \Delta x}(a_{k+\frac{1}{2}} \partial_x u_{k+\frac{1}{2}} ^n - a_{k-\frac{1}{2}} \partial_x u_{k-\frac{1}{2}} ^n) $$\\
+
+$$\partial_x(a(x) \partial u(x,t))= \frac{1}{ \Delta x} (a_{k+\frac{1}{2}} (\frac{u_{k+1} ^n - u_{k} ^n}{ \Delta x})- a_{k-\frac{1}{2}} (\frac{u_{k} ^n - u_{k-1} ^n}{ \Delta x}))$$ \\
+
+$$\partial_x(a(x) \partial u(x,t))= \frac{1}{( \Delta x)^2} (a_{k+\frac{1}{2}} u_{k+1}^n - 
+(a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n +
+a_{k-\frac{1}{2}}u_{k-1} ^n )$$
+
+
+\smallbreak
+
 \section{Méthodes de travail}
 
 
@@ -245,10 +248,10 @@ Nous allons présenter dans cette partie comment nous avons travaillé en groupe
 
 
 
-\section{Méthodes de travail}
+\section{Modèle}
 
 
-Nous allons présenter dans cette partie comment nous avons travaillé en groupe afin de résoudre le projet. 
+
 
 Le système linéaire du minimal model: 
 \begin{equation}
