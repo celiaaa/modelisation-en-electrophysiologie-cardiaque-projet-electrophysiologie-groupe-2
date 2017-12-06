@@ -218,12 +218,37 @@ $$\partial_x f_k ^n = \frac{f_{k+1} ^n - f_{k-1} ^n}{2 \Delta x}$$ \\
 
 $$ \partial_x(a(x) \partial u(x,t)) = \frac{1}{ \Delta x}(a_{k+\frac{1}{2}} \partial_x u_{k+\frac{1}{2}} ^n - a_{k-\frac{1}{2}} \partial_x u_{k-\frac{1}{2}} ^n) $$\\
 
-$$\partial_x(a(x) \partial u(x,t))= \frac{1}{ \Delta x} (a_{k+\frac{1}{2}} (\frac{u_{k+1} ^n - u_{k} ^n}{ \Delta x})- a_{k-\frac{1}{2}} (\frac{u_{k} ^n - u_{k-1} ^n}{ \Delta x}))$$ \\
+$$\partial_x(a(x) \partial u(x,t))_k ^n= \frac{1}{ \Delta x} (a_{k+\frac{1}{2}} (\frac{u_{k+1} ^n - u_{k} ^n}{ \Delta x})- a_{k-\frac{1}{2}} (\frac{u_{k} ^n - u_{k-1} ^n}{ \Delta x}))$$ \\
 
 $$\partial_x(a(x) \partial u(x,t))= \frac{1}{( \Delta x)^2} (a_{k+\frac{1}{2}} u_{k+1}^n - 
 (a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n +
 a_{k-\frac{1}{2}}u_{k-1} ^n )$$
 
+
+de ce fait on a le système suivant: \\
+
+$n \in [0, J-1]$ et $k \in [1, N-1]$
+
+$$ 
+\left\{ 
+	\begin{array}{ll}
+		\frac{u_{k} ^{n+1} - u_{k} ^n}{ \Delta x} - \frac{1}{( \Delta x)^2} (a_{k+\frac{1}{2}} u_{k+1}^n -(a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n + a_{k-\frac{1}{2}}u_{k-1} ^n ) = f_k ^n \\
+		a(x) \partial_x u_0 ^n = 0 \leftrightarrow \partial_x u_0 ^n = 0  \\
+		\partial_x u_N ^n = 0\\
+		a_N \partial_x u_N ^n = 0
+		
+		
+	\end{array}
+\right. 
+$$
+
+$$u_k ^{n+1} = \frac{\Delta t}{ \Delta x ^2} (a_{k+\frac{1}{2}} u_{k+1}^n -(a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n + a_{k-\frac{1}{2}}u_{k-1} ^n ) + f_k ^n + u_k ^n$$
+
+$$u_k ^{n+1} = \frac{\Delta t}{ \Delta x ^2} a_{k-\frac{1}{2}} u_{k-1} ^n +(1- \frac{\Delta t}{\Delta x^2} (a_{k-\frac{1}{2}} + a_{k+\frac{1}{2}}))u_k ^ n +\frac{\Delta t}{\Delta x^2} a_{k+\frac{1}{2}} u_{k+1} ^n + f_k ^n$$
+
+$$\partial_x(a(x) \partial u(x,t))_0 ^n = \frac{2}{\Delta x} a_{\frac{1}{2}} \partial_x u_{\frac{1}{2}} ^n = \frac{2}{\Delta x} a_{\frac{1}{2}} \frac{u_1 ^n - u_0 ^n}{\Delta x}$$
+
+$$\partial_x(a(x) \partial u(x,t))_N ^n = 0 -\frac{a_{N-\frac{1}{2}} \partial_x u_{N-\frac{1}{2}} ^n}{\frac{\Delta x}{2}} = -\frac{2}{\Delta x} a_{N-\frac{1}{2}} \frac{u_N ^n - u_{N-1}^n}{\Delta x}$$
 
 \smallbreak
 
