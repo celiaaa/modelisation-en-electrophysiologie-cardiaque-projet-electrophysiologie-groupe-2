@@ -129,6 +129,33 @@ $f(x,t) = 0$ \\
 la solution est la fonction u définie par : \\
 $$ u(x,t) =  cos(k \pi x) exp(-k^2 \pi^2 t) $$ 
 
+
+
+Résolution du cas 1: \\
+Nous allons résoudre le système par la méthode de séparation des variables.\\
+On pose u(x,t) = f(x)g(t)\\
+de ce fait: 
+$$\partial_t u(x,t) = f(x)g'(t) $$ et $$\partial_{xx}^2 u(x,t) = f(x)''g(t)$$ \\
+On obtient : \\
+$$ \frac{g'(t)}{g(t)} = \frac{f''(x)}{f(x)} = c $$ \\
+Et donc: 
+$ g(t) = \lambda exp(ct) $ avec c < 0 sinon la solution explose ce qui est impossible.\\
+$$\frac{f''(x)}{f(x)} = c \Leftrightarrow f''(x) - f(x) = 0$$ \\
+$$ \Leftrightarrow f(x) = P cos(x \sqrt{|c|}) + Qsin(x \sqrt{|c|})$$ \\
+par compilation on a alors, \\
+$$ u(x,t) = \lambda exp(ct) (P cos(x \sqrt{|c|}) + Qsin(x \sqrt{|c|})) $$ \\
+or $\partial_x u(x,t) = 0 \ sur \  \partial \Omega$ \\
+donc on dérive l'expression et on remplace: \\
+$$ -P \sqrt{|c|} sin(x \sqrt{|c|}) + Q \sqrt{|c|} sin(x \sqrt{|c|}) = 0$$ \\
+quand $x = 0$ on a $q = 0$ et donc:\\
+$$-P \sqrt{|c|} sin(x \sqrt{|c|}) = 0 \Rightarrow \sqrt{|c|}= k \pi \ \forall k \in \mathbb{Z} $$
+
+
+
+
+
+
+
 cas 2:\\
 $f(x,t) \neq 0$ \\
 Ici, f(x,t) est à valeurs dans un espace de Hilbert. $ f \in L^2 $. \\
@@ -165,8 +192,8 @@ On obtient le schéma suivant :\\
 Pour la suite on écrira $u^j_i$ à la place de $u(x_i,t_j)$. \\ 
 Aussi on utilisera la notation :
 $U^j = \left( \begin{array}{c}
-u^j_1\\
-u^j_2 \\
+u^j_0\\
+u^j_1 \\
 \vdots \\
 u^j_N
 \end{array} \right)$
