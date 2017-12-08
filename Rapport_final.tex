@@ -308,7 +308,17 @@ On obtient par transformée de Fourier en espace, la condition CFL pour la stabi
 
 
 
+\subsection{Euler implicite}
+Par le même raisonnement que pour Euler explicite, en prenant pour la dérivée en espace:\\
+\begin{equation}
+\frac{\partial ^2u}{\partial ^2x} = \frac{u(x_{i+1},t_{j+1}) - 2u(x_i,t_{j+1}) + u(x_{i-1},t_{j+1})}{\Delta x^2}
+\end{equation}
 
+$$\frac{u_{k} ^{n+1} - u_{k} ^{n}}{ \Delta t} = \frac{u_{k-1} ^{n+1} - 2u_k ^{n+1} + u_{k+1} ^{n+1}}{\Delta x^2} + f_k ^n $$
+
+Enfin, l'écriture matricielle obtenue est:\\
+
+$$ (Id - A)U^n = U^{n-1} + \Delta t F^n $$
 
 
 
