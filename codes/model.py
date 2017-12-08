@@ -3,7 +3,7 @@
 
 import numpy as np
 import scipy.sparse as sp
-
+import poisson as p
 
 def alpha(x):
     "Coefficient alpha(x) de l'équation"
@@ -34,7 +34,7 @@ def A(dx,n,a):
     diag_p1[0] = diag_p1[0] - a_ip12[0]
     return 1./dx**2 * sp.diags([diag_0,diag_m1,diag_p1],[0,-1,+1],format="csc") # dia ou csc ou csr
 
-def M_CN(dx,dt,n,a):
+def M_CN(dx,dt,n,Omega):
     """M_CN(dx,dt,n)
     
     Renvoie les matrices M = Id + (dt/2dx^2)*A et J = Id - (dt/2dx^2)*A ou A = matrice de discrétisation de
@@ -43,7 +43,7 @@ def M_CN(dx,dt,n,a):
     taille n+1 x n+1. Avec les conditions limites d_x(u)=0
 """
     # Les matrices sont M = Id + (dt/2)*A et J = Id - (dt/2)*A 
-    return sp.identity(n+1,format="csc") + 0.5*dt*A(dx,n,a) , sp.identity(n+1,format="csc") - 0.5*dt*A(dx,n,a)
+    return sp.identity((n+1)*(n+1),format="csc") + 0.5*dt*p.matrix_neumann2D(Omega,n,n) , sp.identity((n+1)*(n+1),format="csc") - 0.5*dt*p.matrix_neumann2D(Omega,n,n)
 
 def heaviside(x):
     return 1*(x>0)
@@ -67,11 +67,11 @@ def Jso(u):
     return (u-uo)*(1-heaviside(u-thetaw))/tauo(u) + heaviside(u-thetaw)/tauso(u)
 def Jsi(u,w,s):
     return -heaviside(u-thetaw)*w*s/tausi
-def I_app(t,x):
-    return 1.*(4.5<t<5.7)*(x<=0.15)*(x>=0.)
+def I_app(t):
+    return 1.*(4.5<t<5.7)#*(x<=0.15)*(x>=0.)*(y<=0.15)*(y>=0.)
 
-def I(u,v,w,s,t,x):
-    return -(Jfi(u,v)+Jso(u)+Jsi(u,w,s)) + I_app(t,x)
+def I(u,v,w,s,t,x,y):
+    return -(Jfi(u,v)+Jso(u)+Jsi(u,w,s)) + I_app(t)
 def g_v(u,v,w,s):
     return (1-heaviside(u-thetav))*(vinf(u)-v)/taumv(u) - heaviside(u-thetav)*v/taupv
 def g_w(u,v,w,s):
@@ -79,12 +79,12 @@ def g_w(u,v,w,s):
 def g_s(u,v,w,s):
     return ((1+ np.tanh(ks*(u-us)))/2.-s)/taus(u)
 
-def G(y,t,x):
-    u = y[0]
-    v = y[1]
-    w = y[2]
-    s = y[3]
-    return np.stack((I(u,v,w,s,t,x), g_v(u,v,w,s), g_w(u,v,w,s), g_s(u,v,w,s)))
+def G(y,t,x,z):
+    u = y[0,:]
+    v = y[1,:]
+    w = y[2,:]
+    s = y[3,:]
+    return np.stack((I(u,v,w,s,t,x,z), g_v(u,v,w,s), g_w(u,v,w,s), g_s(u,v,w,s)))
 
 uo=0
 uu=1.55

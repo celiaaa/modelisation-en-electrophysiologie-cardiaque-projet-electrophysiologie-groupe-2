@@ -10,27 +10,28 @@ from mpl_toolkits.mplot3d import Axes3D
 from math import ceil,floor
 from scipy.sparse.linalg import splu
 from scipy.sparse import csc_matrix , diags
-
+from time import sleep
 # Initialisation des paramètres
-a,b = 0. , 1. # On modèlise sur le segment (0,1)
-t = 20.
+Omega = [0.,1.,0.,1.] # On modèlise sur le carré (0,1)x(0,1)
+t = 50.
 D = 1.e-3
 
-N=50
-dx = (b-a)/float(N)
-dt = dx*dx
+N=10
+n2=(N+1)*(1+N)
+h = (Omega[1]-Omega[0])/float(N)
+dt = h*h
 print "dt : ",dt
 P = int(t/dt)
 
-T = np.linspace(0.,t,P+1)
-X = np.linspace(a,b,N+1)
+Y,X = np.mgrid[Omega[0]:Omega[1]+h:h, Omega[2]:Omega[3]+h:h]
 
-y0 = np.zeros((4,N+1))
-y1 = np.zeros((4,N+1))
+print X.shape , Y.shape
 
-A = D*m.A(dx,N,a)
+y0 = np.zeros((4,n2))
+y1 = np.zeros((4,n2))
 
-M,J = m.M_CN(dx,dt,N,a)         # Matrice du schéma Euler Implicite
+
+M,J = m.M_CN(h,dt,N,Omega)         # Matrice du schéma Euler Implicite
 B = splu(M)                     # Factorisation LU
 
 # Conditions initiales
@@ -40,37 +41,29 @@ y0[2,:] = 1.  # w
 y0[3,:] = 0.  # s 
 
 # Stockage pour l'affiche
-U = np.zeros((P+1,N+1))
-U[0,:] = y0[0,:]
-S = np.zeros((3,P+1))
-
+U = np.zeros((N,N))
+# S = np.zeros((3,P+1))
+print P
 for n in np.arange(1,P+1,1):
-    y1 = y0 + dt*m.G(y0,(n-1)*dt,X)
+    y1 = y0 + dt*m.G(y0,(n-1)*dt,X,Y)
 
     y1[0,:] = B.solve(J.dot(y1[0,:]))
     y0 = y1
     
-    U[n,:] = y0[0,:]
-    S[0,n] = y1[1,1]
-    S[1,n] = y1[2,1]
-    S[2,n] = y1[3,1]
     
+    
+    # S[0,n] = y1[1,1]
+    # S[1,n] = y1[2,1]
+    # S[2,n] = y1[3,1]
     
     # Affichage des résultats
-
-U = m.U_mv(U)
-sx,st = sp.meshgrid(X,T)
-
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-ax.set_xlabel('espace', fontsize=12)
-ax.set_ylabel('temps',fontsize=12)
-ax.set_zlabel('potentiel',fontsize=14)
-
-norm = colors.Normalize(np.max(U[n,:]),np.min(U[n,:]))
-surf = ax.plot_surface(sx,st,U ,cstride=1,linewidth=0,cmap='jet')
-
-cb = fig.colorbar(surf,ax=ax)
+    if n%100==0:
+        U = np.reshape(y0[0,:],(N+1,N+1))
+        U = m.U_mv(U)
+        plt.contourf(X,Y,U,vmin=0,vmax=1)
+        plt.show()
+        sleep(0.01)
+    
 
 # plt.plot(T,S[2 ,:])
-plt.show()
+
