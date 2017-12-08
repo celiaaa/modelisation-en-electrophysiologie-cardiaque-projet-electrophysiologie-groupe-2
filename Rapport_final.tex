@@ -251,7 +251,29 @@ $$\partial_x(a(x) \partial u(x,t))_0 ^n = \frac{2}{\Delta x} a_{\frac{1}{2}} \pa
 $$\partial_x(a(x) \partial u(x,t))_N ^n = 0 -\frac{a_{N-\frac{1}{2}} \partial_x u_{N-\frac{1}{2}} ^n}{\frac{\Delta x}{2}} = -\frac{2}{\Delta x} a_{N-\frac{1}{2}} \frac{u_N ^n - u_{N-1}^n}{\Delta x}$$
 
 $$\frac{u_{k} ^{n+1} - u_{k} ^{n_0}}{ \Delta x} - \frac{2}{( \Delta x)^2} a_{N-\frac{1}{2}}(\frac{u_N ^n - u_{N-1}^n}{\Delta x})  = f_k ^n$$
-pour k= 0: $$\frac{u_{0} ^{n+1} - u_{0} ^{n_0}}{ \Delta x} - \frac{2}{( \Delta x)^2} a_{\frac{1}{2}}(u_1 ^n - u_0^n)  = f_0 ^n$$
+pour k= 0: $$\frac{u_{0} ^{n+1} - u_{0} ^{n_0}}{ \Delta x} - \frac{2}{( \Delta x)^2} a_{\frac{1}{2}}(u_1 ^n - u_0^n)  = f_0 ^n$$ \\
+
+$$u_0 ^{n+1} = \frac{2 \Delta t}{ \Delta x ^2} a_{\frac{1}{2}} (u_1^n -u_0 ^n) + f_0 ^n + u_0 ^n$$ \\
+$$u_0 ^{n+1} = u_0 ^{n} - \frac{2 \Delta t}{ \Delta x ^2} a_{\frac{1}{2}} u_0 ^n + \frac{2 \Delta t}{ \Delta x ^2} a_{\frac{1}{2}} u_1 ^n + f_0 ^n$$ \\
+\\
+$pour k = [1,...N-1]$\\
+$$u_k ^{n+1} = u_k ^{n} + \frac{ \Delta t}{ \Delta x ^2} a_{k - \frac{1}{2}} u_{k-1} ^n - \frac{ \Delta t}{ \Delta x ^2} ( a_{k + \frac{1}{2}} +a_{k - \frac{1}{2}}) u_{k} ^n +\frac{ \Delta t}{ \Delta x ^2} a_{k+ \frac{1}{2}} u_{k+1} ^n + f_k ^n$$ \\
+\\
+$$ u_k ^{n+1} = u_k ^{n} +  \frac{2 \Delta t}{ \Delta x} a_{n - \frac{1}{2}} u_{N-1} ^n -  \frac{2 \Delta t}{ \Delta x} a_{n - \frac{1}{2}} u_{N} ^n + f_N ^n$$\\
+$u^n = (u_0 ^n, u_1 ^n, ...u_N ^n) $ et $ F^n = (f_0 ^n, f_1 ^n, ...f_N ^n)$ \\
+
+$$u^{n+1} = u^n + Au^n + F^n = u^n - $$
+
+
+
+
+
+
+
+
+
+
+
 
 
 
