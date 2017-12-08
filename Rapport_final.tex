@@ -262,9 +262,21 @@ $$u_k ^{n+1} = u_k ^{n} + \frac{ \Delta t}{ \Delta x ^2} a_{k - \frac{1}{2}} u_{
 $$ u_k ^{n+1} = u_k ^{n} +  \frac{2 \Delta t}{ \Delta x} a_{n - \frac{1}{2}} u_{N-1} ^n -  \frac{2 \Delta t}{ \Delta x} a_{n - \frac{1}{2}} u_{N} ^n + f_N ^n$$\\
 $u^n = (u_0 ^n, u_1 ^n, ...u_N ^n) $ et $ F^n = (f_0 ^n, f_1 ^n, ...f_N ^n)$ \\
 
-$$u^{n+1} = u^n + Au^n + F^n = u^n - $$
+$$u^{n+1} = u^n + Au^n + F^n = u^n - \frac{\Delta t}{ \Delta x^2} Au^n + F^n $$ \\
 
+On obtient alors la matrice suivante: \\
 
+\begin{equation}
+A = 
+\begin{pmatrix}
+   2 a_{\frac{1}{2}} & -2 a_{\frac{1}{2}} & 0 & \ldots & \ldots & 0\\
+   -a_{\frac{1}{2}} & - (a_{\frac{1}{2}} + a_{\frac{3}{2}} ) & -a_{\frac{3}{2}} & 0 \ddots & & \vdots \\
+   0 & -a_{\frac{3}{2}} & - (a_{\frac{5}{2}} + a_{\frac{3}{2}} ) & -a_{\frac{5}{2}} & \ddots & \vdots\\
+   \vdots & \ddots & \ddots & \ddots &\ddots & 0\\
+   \vdots & & \ddots & -a_{N -\frac{3}{2}} & - (a_{N - \frac{1}{2}} + a_{N +\frac{3}{2}} ) & a_{N - \frac{1}{2}}\\
+   0 & \cdots & \cdots & 0 & -2 a_{N -\frac{1}{2}} & -2 a_{N -\frac{1}{2}}
+\end{pmatrix}
+\end{equation}
 
 
 
