@@ -207,32 +207,35 @@ f(x_N,t_j)
 
 
 \smallbreak
-
+Par les formules de Taylor, on discrétise la dérivée seconde en espace:\\
 $$f(x + \Delta x, t) = f(x,t) + \Delta x \partial_x f(x,t) + \frac{(\Delta x)^2}{2} \partial_{xx} ^2 f(x,t) + \theta (\Delta x^3) $$ \\
 
 $$f(x - \Delta x, t) = f(x,t) - \Delta x \partial_x f(x,t) + \frac{(\Delta x)^2}{2} \partial_{xx} ^2 f(x,t) + \theta (\Delta x^3) $$ \\
+On soustrait les deux équations: \\
 
 $$f(x + \Delta x, t) -f(x - \Delta x, t) = 2 \Delta x \partial_x f(x,t) + \theta (\Delta x^3) $$ \\
 $$\frac{f(x + \Delta x, t) -f(x - \Delta x, t)}{2 \Delta x} = \partial_x f(x,t) + \theta (\Delta x^2)$$ \\
 $$\partial_x f_k ^n = \frac{f_{k+1} ^n - f_{k-1} ^n}{2 \Delta x}$$ \\
 
-$$ \partial_x(a(x) \partial u(x,t)) = \frac{1}{ \Delta x}(a_{k+\frac{1}{2}} \partial_x u_{k+\frac{1}{2}} ^n - a_{k-\frac{1}{2}} \partial_x u_{k-\frac{1}{2}} ^n) $$\\
 
+On effectue le même raisonnement que précédemment pour trouver la dérivée seconde:\\
+$$ \partial_x(a(x) \partial_x u(x,t)) = \frac{1}{ \Delta x}(a_{k+\frac{1}{2}} \partial_x u_{k+\frac{1}{2}} ^n - a_{k-\frac{1}{2}} \partial_x u_{k-\frac{1}{2}} ^n) $$\\
+
+On remplace dans l'équation de la dérivée seconde ce que l'on a trouvée pour la dérivée première:\\
 $$\partial_x(a(x) \partial u(x,t))_k ^n= \frac{1}{ \Delta x} (a_{k+\frac{1}{2}} (\frac{u_{k+1} ^n - u_{k} ^n}{ \Delta x})- a_{k-\frac{1}{2}} (\frac{u_{k} ^n - u_{k-1} ^n}{ \Delta x}))$$ \\
-
+On factorise par $\frac{1}{\Delta x}$ , ce qui donne: \\
 $$\partial_x(a(x) \partial u(x,t))= \frac{1}{( \Delta x)^2} (a_{k+\frac{1}{2}} u_{k+1}^n - 
 (a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n +
-a_{k-\frac{1}{2}}u_{k-1} ^n )$$
+a_{k-\frac{1}{2}}u_{k-1} ^n )$$\\
 
+On discrétise la dérivée en temps par $\frac{u_{k} ^{n+1} - u_{k} ^n}{ \Delta t}$, de ce fait on a le système suivant: \\
 
-de ce fait on a le système suivant: \\
-
-$n \in [0, J-1]$ et $k \in [1, N-1]$
+Pour $n \in [0, J]$ et $k \in [1, N-1]$, avec $J = \frac{T}{\Delta t} $ et $N = \frac{1}{\Delta x}$, on a: \\
 
 $$ 
 \left\{ 
 	\begin{array}{ll}
-		\frac{u_{k} ^{n+1} - u_{k} ^n}{ \Delta x} - \frac{1}{( \Delta x)^2} (a_{k+\frac{1}{2}} u_{k+1}^n -(a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n + a_{k-\frac{1}{2}}u_{k-1} ^n ) = f_k ^n \\
+		\frac{u_{k} ^{n+1} - u_{k} ^n}{ \Delta t} - \frac{1}{( \Delta x)^2} (a_{k+\frac{1}{2}} u_{k+1}^n -(a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n + a_{k-\frac{1}{2}}u_{k-1} ^n ) = f_k ^n \\
 		a(x) \partial_x u_0 ^n = 0 \leftrightarrow \partial_x u_0 ^n = 0  \\
 		\partial_x u_N ^n = 0\\
 		a_N \partial_x u_N ^n = 0
@@ -242,16 +245,80 @@ $$
 \right. 
 $$
 
+On isole le $u_k ^{n+1}$:\\
 $$u_k ^{n+1} = \frac{\Delta t}{ \Delta x ^2} (a_{k+\frac{1}{2}} u_{k+1}^n -(a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n + a_{k-\frac{1}{2}}u_{k-1} ^n ) + f_k ^n + u_k ^n$$
-
+On regroupe les termes $u_k ^n$,  $ u_{k-1} ^{n}$ et $ u_{k+1} ^{n}$ :\\
 $$u_k ^{n+1} = \frac{\Delta t}{ \Delta x ^2} a_{k-\frac{1}{2}} u_{k-1} ^n +(1- \frac{\Delta t}{\Delta x^2} (a_{k-\frac{1}{2}} + a_{k+\frac{1}{2}}))u_k ^ n +\frac{\Delta t}{\Delta x^2} a_{k+\frac{1}{2}} u_{k+1} ^n + f_k ^n$$
+D'après les conditions au bord, on a:\\
+$$
+\left\{
+	\begin{array}{ll}
+		\partial_x(a(x) \partial u(x,t))_0 ^n = \frac{2}{\Delta x} a_{\frac{1}{2}} \partial_x u_{\frac{1}{2}} ^n = \frac{2}{\Delta x} a_{\frac{1}{2}} \frac{u_1 ^n - u_0 ^n}{\Delta x} \\
+		\partial_x(a(x) \partial u(x,t))_N ^n = 0 -\frac{a_{N-\frac{1}{2}} \partial_x u_{N-\frac{1}{2}} ^n}{\frac{\Delta x}{2}} = -\frac{2}{\Delta x} a_{N-\frac{1}{2}} \frac{u_N ^n - u_{N-1}^n}{\Delta x}
 
-$$\partial_x(a(x) \partial u(x,t))_0 ^n = \frac{2}{\Delta x} a_{\frac{1}{2}} \partial_x u_{\frac{1}{2}} ^n = \frac{2}{\Delta x} a_{\frac{1}{2}} \frac{u_1 ^n - u_0 ^n}{\Delta x}$$
+	\end{array}
+\right. 
+$$
+De ce fait l'équation discrétisée au bord donne: \\
+$$\frac{u_{k} ^{n+1} - u_{k} ^{n}}{ \Delta x} - \frac{2}{( \Delta x)^2} a_{N-\frac{1}{2}}(\frac{u_N ^n - u_{N-1}^n}{\Delta x})  = f_k ^n$$
+pour k= 0: $\frac{u_{0} ^{n+1} - u_{0} ^{n}}{ \Delta x} - \frac{2}{( \Delta x)^2} a_{\frac{1}{2}}(u_1 ^n - u_0^n)  = f_0 ^n$ \\
 
-$$\partial_x(a(x) \partial u(x,t))_N ^n = 0 -\frac{a_{N-\frac{1}{2}} \partial_x u_{N-\frac{1}{2}} ^n}{\frac{\Delta x}{2}} = -\frac{2}{\Delta x} a_{N-\frac{1}{2}} \frac{u_N ^n - u_{N-1}^n}{\Delta x}$$
+On isole $u_0 ^{n+1}$: $u_0 ^{n+1} = \frac{2 \Delta t}{ \Delta x ^2} a_{\frac{1}{2}} (u_1^n -u_0 ^n) + f_0 ^n + u_0 ^n$ \\
 
-$$\frac{u_{k} ^{n+1} - u_{k} ^{n_0}}{ \Delta x} - \frac{2}{( \Delta x)^2} a_{N-\frac{1}{2}}(\frac{u_N ^n - u_{N-1}^n}{\Delta x})  = f_k ^n$$
-pour k= 0: $$\frac{u_{0} ^{n+1} - u_{0} ^{n_0}}{ \Delta x} - \frac{2}{( \Delta x)^2} a_{\frac{1}{2}}(u_1 ^n - u_0^n)  = f_0 ^n$$
+Puis, $u_0 ^{n+1} = u_0 ^{n} - \frac{2 \Delta t}{ \Delta x ^2} a_{\frac{1}{2}} u_0 ^n + \frac{2 \Delta t}{ \Delta x ^2} a_{\frac{1}{2}} u_1 ^n + f_0 ^n$ \\
+
+\bigbreak
+
+
+Finalement, l'équation s'écrit pour $k = 0,...N$ et $n = 1,...,J$:
+
+
+$$
+\left\{
+	\begin{array}{ll}
+		u_k ^{n+1} = u_k ^{n} + \frac{ \Delta t}{ \Delta x ^2} a_{k - \frac{1}{2}} u_{k-1} ^n - \frac{ \Delta t}{ \Delta x ^2} ( a_{k + \frac{1}{2}} +a_{k - \frac{1}{2}}) u_{k} ^n +\frac{ \Delta t}{ \Delta x ^2} a_{k+ \frac{1}{2}} u_{k+1} ^n + f_k ^n\\
+		u_k ^{n+1} = u_k ^{n} +  \frac{2 \Delta t}{ \Delta x} a_{n - \frac{1}{2}} u_{N-1} ^n -  \frac{2 \Delta t}{ \Delta x} a_{n - \frac{1}{2}} u_{N} ^n + f_N ^n
+	\end{array}
+\right. 
+$$\\
+avec $u^n = (u_0 ^n, u_1 ^n, ...u_N ^n) $ et $ F^n = (f_0 ^n, f_1 ^n, ...f_N ^n)$ \\
+On écrit cela sous forme matricielle:\\
+$$U^{n+1} = U^n - \frac{\Delta t}{ \Delta x^2} AU^n + F^n \Delta t$$ \\
+
+On obtient alors la matrice suivante: \\
+
+\begin{equation}
+A = 
+\begin{pmatrix}
+   2 a_{\frac{1}{2}} & -2 a_{\frac{1}{2}} & 0 & \ldots & \ldots & 0\\
+   -a_{\frac{1}{2}} & - (a_{\frac{1}{2}} + a_{\frac{3}{2}} ) & -a_{\frac{3}{2}} & 0 \ddots & & \vdots \\
+   0 & -a_{\frac{3}{2}} & - (a_{\frac{5}{2}} + a_{\frac{3}{2}} ) & -a_{\frac{5}{2}} & \ddots & \vdots\\
+   \vdots & \ddots & \ddots & \ddots &\ddots & 0\\
+   \vdots & & \ddots & -a_{N -\frac{3}{2}} & - (a_{N - \frac{1}{2}} + a_{N +\frac{3}{2}} ) & a_{N - \frac{1}{2}}\\
+   0 & \cdots & \cdots & 0 & -2 a_{N -\frac{1}{2}} & -2 a_{N -\frac{1}{2}}
+\end{pmatrix}
+\end{equation}
+
+
+
+
+$$U^{n+1} = U^n(I_N - \frac{\Delta t}{ \Delta x^2} A_N)  + F^n \Delta t $$ \\
+
+On obtient par transformée de Fourier en espace, la condition CFL pour la stabilité $L^2$, $\Delta t \leq \Delta x^2$.\\
+
+
+
+\subsection{Euler implicite}
+Par le même raisonnement que pour Euler explicite, en prenant pour la dérivée en espace:\\
+\begin{equation}
+\frac{\partial ^2u}{\partial ^2x} = \frac{u(x_{i+1},t_{j+1}) - 2u(x_i,t_{j+1}) + u(x_{i-1},t_{j+1})}{\Delta x^2}
+\end{equation}
+
+$$\frac{u_{k} ^{n+1} - u_{k} ^{n}}{ \Delta t} = \frac{u_{k-1} ^{n+1} - 2u_k ^{n+1} + u_{k+1} ^{n+1}}{\Delta x^2} + f_k ^n $$
+
+Enfin, l'écriture matricielle obtenue est:\\
+
+$$ (Id - A)U^n = U^{n-1} + \Delta t F^n $$
 
 
 
