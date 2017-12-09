@@ -37,7 +37,7 @@
 % Les informations de la page de titre (page de titre séparée pour un 'report').
 \title{
 \vspace*{1in}
-\textbf{Electrocardiogramme}}
+\textbf{Modélisation en électrophysiologie cardiaque}}
 
 \author{Rémi HERNANDEZ\\
         Romuald MAKOSSO NOMBO\\
@@ -59,7 +59,6 @@
 % \thanks: permet de mettre une note de bas de page pour l'auteur
 % \href: insère un lien, ici vers l'application 'mailto'
 % \tt: police monospace
-\date{\today} % \today pour la date courante 
 
 \cleardoublepage
 
@@ -120,16 +119,15 @@ On remarque par ailleurs que l'on a l'équation chaleur pour le cas $a(x) = 1$. 
 
 
 Situation où l'on peut calculer des solutions analytiques: \\
-dans le cas ($a(x) = 1$) on a l'équation de la chaleur. De plus avec nos conditions aux bords, ie les dérivées sont nulles, on a deux cas, $ f(x) \neq 0$ ou $f(x) = 0$. Ici, on prend le cas où $f(x) = 0$: \\
+dans le cas $a(x) = 1$ on a l'équation de la chaleur. De plus avec nos conditions aux bords, ie les dérivées sont nulles, on a deux cas, $ f(x) \neq 0$ ou $f(x) = 0$. Ici, on prend le cas où $f(x) = 0$: \\
  
 
 
-la solution est la fonction u définie par : \\
-$$ u(x,t) =  cos(k \pi x) exp(-k^2 \pi^2 t) $$ 
+La solution est la fonction u définie par: $ u(x,t) =  cos(k \pi x) exp(-k^2 \pi^2 t) $ \\
 
 
 
-Résolution du cas: \\
+\textbf{ Résolution de l'équation de la chaleur} \\
 Nous allons résoudre le système par la méthode de séparation des variables.\\
 On pose u(x,t) = f(x)g(t)\\
 de ce fait: 
@@ -143,7 +141,7 @@ $$ \Leftrightarrow f(x) = P cos(x \sqrt{|c|}) + Qsin(x \sqrt{|c|})$$ \\
 par compilation on a alors, \\
 $$ u(x,t) = \lambda exp(ct) (P cos(x \sqrt{|c|}) + Qsin(x \sqrt{|c|})) $$ \\
 or $\partial_x u(x,t) = 0 \ sur \  \partial \Omega$, donc on dérive l'expression et on remplace: \\
-$$ -P \sqrt{|c|} sin(x \sqrt{|c|}) + Q \sqrt{|c|} sin(x \sqrt{|c|}) = 0$$ \\
+$$ -P \sqrt{|c|} sin(x \sqrt{|c|}) + Q \sqrt{|c|} cos(x \sqrt{|c|}) = 0$$ \\
 
 On obtient le système de résolution suivant: 
 
@@ -168,8 +166,9 @@ $$
 	\end{array}
 \right. 
 $$\\
- On obtient ainsi: $c= (k \pi)^2 \; \forall k \in \mathbb{Z} $ \\
-La solution s'écrit donc $ u(x,t) = \lambda exp((k \pi)^2t $ , avec la condition initiale $u(0,x) = u_0 (x)$ on a alors $u_0 (x) = cos(xk \pi)$ avec $\lambda = 1$.
+On obtient ainsi: $c= -(k \pi)^2 \; \forall k \in \mathbb{Z} $ \\
+Avec la condition initiale $u(0,x) = u_0 (x)$, on a alors $u_0 (x) = cos(xk \pi)$ de ce fait $\lambda = 1$ \\
+La solution s'écrit donc $ u(x,t) = \lambda exp(-k^2 \pi ^2 t)cos(xk \pi) $ .\\
 
 \chapter{programmation dans un cas simplifié} 
 \section{Schémas numériques pour la résolution}
@@ -323,8 +322,10 @@ $$U^{n+1} = (I_N - \frac{\Delta t}{ \Delta x^2} A_N)U^n  + F^n \Delta t $$ \\
 
 On obtient par transformée de Fourier en espace, la condition CFL pour la stabilité $L^2$, $\Delta t \leq \frac{\Delta x^2}{2}$.\\
 
-\includegraphics[scale=0.5]{./figure_1.png}\\
-
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./figure_1.png}\\
+\end{figure}
 
 \subsection{Euler implicite}
 Par le même raisonnement que pour Euler explicite, en prenant pour la dérivée en espace:\\
@@ -398,16 +399,45 @@ Nous avons des représentations graphiques du minimal model après un codage en 
 
 Sur les quatres premières images nous avons choisit une simuation sur l'intervalle de temps : [5;6.5] ms\\
 
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./s(t).png}
+\end{figure}
 
-\includegraphics[scale=0.5]{./s(t).png}\\
-\includegraphics[scale=0.5]{./s(t)_2.png}\\
-\includegraphics[scale=0.5]{./u(t).png}\\
-\includegraphics[scale=0.5]{./u(t)_2.png}\\
-\includegraphics[scale=0.5]{./v(t).png}\\
-\includegraphics[scale=0.5]{./v(t)_2.png}\\
-\includegraphics[scale=0.5]{./w(t).png}\\
-\includegraphics[scale=0.5]{./w(t)_2.png}\\
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./s(t)_2.png}
+\end{figure}
 
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./u(t).png}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./u(t)_2.png}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./v(t).png}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./v(t)_2.png}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./w(t).png}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{./w(t)_2.png}
+\end{figure}
 
 
 
