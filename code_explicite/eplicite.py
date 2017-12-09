@@ -12,7 +12,7 @@ reload (sys)
 sys.setdefaultencoding('utf8')
 
 a,b=0.,1.
-T=0.5
+T=0.3
 
 N = input("Quelle valeur pour N : ")
 
@@ -35,39 +35,33 @@ for n in np.arange(1,P+1,1):
 
 
     
-xx,tt = np.meshgrid(t,x)
+xx,tt = np.meshgrid(x,t)
 
 z = g.u_ex(xx,tt)
 diff = 0*u
-for i in np.arange(0,P+1,1):
-    diff[:,i] = np.abs(z[:,i]-u[:,i])
-
-print np.amax(diff)
-
 # Affichage des résulats
 
-# fig = plt.figure()
-# ax = fig.gca(projection='3d')
+fig = plt.figure()
+ax = fig.gca(projection='3d')
 
-# surf = ax.plot_surface(xx,tt,diff,linewidth=0)
 
-# ax.set_xlabel('X', fontsize = 12)
-# ax.set_ylabel('temps', fontsize = 12)
-# ax.set_zlabel('u', fontsize = 12)
+ax.set_xlabel('X', fontsize = 12)
+ax.set_ylabel('temps', fontsize = 12)
+ax.set_zlabel('u', fontsize = 12)
 
 # --------Affiche la solution exacte
-# ax.set_title('Solution exacte',fontsize = 16)
-# surf = ax.plot_surface(xx,tt,z,linewidth=0, cmap='jet')
+#ax.set_title('Solution exacte',fontsize = 16)
+#surf = ax.plot_surface(xx,tt,z,linewidth=0, cmap='jet')
 
 # --------Affiche la solution approchée
-# ax.set_title('Solution approchée', fontsize = 16)
-# surf = ax.plot_surface(xx,tt,u,linewidth=0, cmap='jet')
+ax.set_title('Solution approchée', fontsize = 16)
+surf = ax.plot_surface(xx,tt,np.transpose(u),linewidth=0, cmap='jet')
 
 
-# norm = colors.Normalize(-1,1)
-# cb = fig.colorbar(surf,ax=ax)
+norm = colors.Normalize(-1,1)
+cb = fig.colorbar(surf,ax=ax)
 
-# plt.show()
+plt.show()
 
 
 
