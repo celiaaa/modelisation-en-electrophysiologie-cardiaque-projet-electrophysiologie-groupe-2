@@ -350,9 +350,9 @@ Nous allons présenter dans cette partie comment nous avons travaillé en groupe
 
 
 
-Le système linéaire du minimal model: 
+Le système linéaire du minimal model en dimension 1 :
 \begin{equation}
-\frac{\partial u}{\partial t}=\bigtriangledown( D \bigtriangledown U )-(J_{fi}+J_{so}+	J{si})
+\frac{\partial u}{\partial t}=\bigtriangledown( D \bigtriangledown U )-(J_{fi}+J_{so}+    J{si})
 \end{equation}
 \begin{equation}
 \frac{\partial v}{\partial t}=\frac{(1-H(u-\theta_v)(v_\infty -v))}{\tau_v^-}-\frac{H(u-\theta_v)v}{\theta_v^+}
@@ -375,4 +375,120 @@ $J_so=\frac{\frac{u-u_0}{1-H(U-\theta_w)}}{\tau_{so}}$
 
 
 $J_si=\frac{-H(u-\theta_w)ws}{\tau_{si}}$
+
+
+Nous avons des représentations graphiques du minimal model après un codage en ... :\\
+
+
+
+\includegraphics[scale=0.5]{./s(t).png}\\
+\includegraphics[scale=0.5]{./s(t)_2.png}\\
+
+\includegraphics[scale=0.5]{./u(t).png}\\
+\includegraphics[scale=0.5]{./u(t)_2.png}\\
+
+\includegraphics[scale=0.5]{./v(t).png}\\
+\includegraphics[scale=0.5]{./v(t)_2.png}\\
+
+\includegraphics[scale=0.5]{./w(t).png}\\
+\includegraphics[scale=0.5]{./w(t)_2.png}\\
+
+
+
+
+
+Passage en dimension 2:
+
+Dans le passage en dimension en dimension 2 on se retrouve avec (l'équation des ondes) , la variable a(x,y) devient une matrice $2*2$ .
+Nous choisirons la matrice nommé A , diagonale composée de variables mesurables et positives :
+ $\alpha(x,y)$ et $\beta(x,y)$
+ 
+ le choix de ces  propriétés vient du fait que nous modélisons un phénomène de propagation ( du flux électrique qui travers les ventricule du cœur)
+
+Notre matrice A sera ainsi de cette forme là:
+
+\begin{equation}
+A=\begin{pmatrix}\alpha(x,y)&0\\
+0&\beta(x,y)\\\end{pmatrix}
+ \end{equation}
+
+Nous allons essayer de trouver les solutions analytiques de cette equation de dimension 2:
+\begin{equation}
+\partial{t} u -\begin{pmatrix}\partial{x} & \partial{y}
+\end{pmatrix} \begin{pmatrix}\alpha(x,y)&0\\
+0&\beta(x,y)\\\end{pmatrix} \begin{pmatrix}\partial{x}u\\
+\partial{y}u\\
+\end{pmatrix} =f(x,y)
+\end{equation}
+
+On développe :
+ 
+\begin{equation}
+\partial{t} u -\begin{pmatrix}\partial{x} & \partial{y}
+\end{pmatrix}\begin{pmatrix}\alpha \partial{x}U & \beta\partial{y} U
+\end{pmatrix}=f(x,y)
+\end{equation}
+Et on se retrouve avec cette equation :
+\begin{equation}
+\partial{t} u-\partial{x}(\alpha \partial{x}U)-\partial{y}(\beta \partial{y}U)=f(x,y)
+\end{equation}
+
+Avec les conditions aux bords:
+$\partial{x}(\alpha \partial{x}U)=\partial{y}(\beta \partial{y}U)=0$
+Nous allons maintenant appliquer le schéma d'Euler explicite consistant en ordre $\theta(\delta t +\delta x^2)$
+\begin{equation}
+\partial{t} (U{i,j} )^n=\frac{u_{i,j}^{n+1}-u_{i,j}^n}{\delta t}
+\end{equation}
+On applique la Formule de (Trapèze) :
+\begin{equation}
+(\partial{x}(\alpha \partial{x}U))_{i,j}^n=\frac{\alpha_{i+1/2}^j\partial{x}U_{i+1/2}^n-\alpha_{i-1/2}^j\partial{x}U_{i-1/2}^n}{\delta x}=\alpha_{i+1/2}^j(\frac{U_{i+1,j}^n-U_{i,j}^n}{\delta^2})-\alpha_{i-1/2}^j(\frac{U_{i,j}^n-U_{i-1,j}^n}{\delta^2})
+\end{equation}
+
+
+\begin{equation}
+\partial{x}(\alpha \partial{x}U)_{i,j}^n=\frac{\alpha_{i-1/2}^j}{\delta x^2}U_{i,j-1}^n+\frac{\alpha_{i+1/2}^j-\alpha_{i-1/2}^j}{\delta x^2}U_{i,j}^n +\frac{\alpha_{i+1/2}^j}{\delta x^2}U_{i+1,j}^n
+\end{equation}
+
+
+ Idem pour les dérivées partielles par apport à y :
+\begin{equation}
+\partial{y}(\beta \partial{y}U)_{i,j}^n=\frac{\beta_i^{j-1/2}}{\delta y^2}U_{i,j-1}^n+\frac{\beta_{i}^{j+1/2}-\beta_{i}^{j-1/2}}{\delta y^2}U_{i,j}^n +\frac{\beta_{i}^{j+1/2}}{\delta y^2}U_{i,j+1}^n
+\end{equation}
+
+
+$i=1,....,N-1$
+
+$j=1,....,N-1$
+
+Du coup ,
+\begin{equation}
+\partial{t} (U{i,j} )^n -\partial{y}(\beta \partial{y}U)_{i,j}^n-\partial{x}(\alpha \partial{x}U)_{i,j}^n=f_i^j
+\end{equation}
+En effet, le schéma d'Euler s'écrit :
+\begin{equation}
+\frac{u_{i,j}^{n+1}-u_{i,j}^n}{\delta t}-\frac{\alpha_{i-1/2}^j  u_{i-1,j}^n +\beta_{i}^{j-1/2} u_{i,j-1}^{n}+ (\alpha_{i+1/2}^j - \alpha_{i-1/2}^j+ \beta_{i}^{j+1/2} -\beta_{i}^{j-1/2} ) u_{i,j}^n + \alpha_{i+1/2}^j u_{i+1,j}^{n} + \beta_{i}^{j+1/2} u_{i,j+1}^n}{h^2}
+\end{equation}
+
+Avec les conditions aux bords :
+\begin{equation}
+\partial{x}(\alpha\partial{x}u)_{0,j}^n=0
+\end{equation}
+
+\begin{equation}
+u_{0,j}^{n+1}=2\frac{\delta t}{\delta x^2}\alpha_{1/2}^j(u_{1,j}^n-u_{0,j}^n)f_0^j +u_{0,j}^n
+\end{equation}
+
+\begin{equation}
+u_{N+1,j}^{n+1}=u_{N,j}^{n}+2\frac{\delta t}{\delta x} \alpha_{N-1/2}^j U_{N-1,j}^n-2\frac{\delta t}{\delta x} \alpha_{N-1/2}^j U_{N,j}^n +f_N^j
+\end{equation}
+
+\begin{equation}
+u_{i,N}^{n+1}=u_{i,N}^{n}+2\frac{\delta t}{\delta x} \beta_{i}^{N-1/2} U_{i,N-1}^n-2\frac{\delta t}{\delta x} \beta_{i}^{N-1/2} U_{i,N}^n +f_i^N
+\end{equation}
+
+\begin{equation}
+u_{i,0}^{n+1}=\frac{\delta t}{\delta x} \beta_{i}^{1/2}(U_{j,1}^n-U_{i,0}^n)j_j^0+U_{i,0}^n
+\end{equation}
+
+(les conditions Cfl )
 \end{document}
