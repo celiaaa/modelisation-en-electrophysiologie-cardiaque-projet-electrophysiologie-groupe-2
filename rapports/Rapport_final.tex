@@ -119,7 +119,7 @@ On remarque par ailleurs que l'on a l'équation chaleur pour le cas $a(x) = 1$. 
 
 
 
-2) Situation où l'on peut calculer des solutions analytiques: \\
+Situation où l'on peut calculer des solutions analytiques: \\
 dans le cas ($a(x) = 1$) on a l'équation de la chaleur. De plus avec nos conditions aux bords, ie les dérivées sont nulles, on a deux cas, $ f(x) \neq 0$ ou $f(x) = 0$. Ici, on prend le cas où $f(x) = 0$: \\
  
 
@@ -138,21 +138,38 @@ On obtient : \\
 $$ \frac{g'(t)}{g(t)} = \frac{f''(x)}{f(x)} = c $$ \\
 Et donc: 
 $ g(t) = \lambda exp(ct) $ avec c < 0 sinon la solution explose ce qui est impossible.\\
-$$\frac{f''(x)}{f(x)} = c \Leftrightarrow f''(x) - f(x) = 0$$ \\
+$$\frac{f''(x)}{f(x)} = c \Leftrightarrow f''(x) - cf(x) = 0$$ \\
 $$ \Leftrightarrow f(x) = P cos(x \sqrt{|c|}) + Qsin(x \sqrt{|c|})$$ \\
 par compilation on a alors, \\
 $$ u(x,t) = \lambda exp(ct) (P cos(x \sqrt{|c|}) + Qsin(x \sqrt{|c|})) $$ \\
-or $\partial_x u(x,t) = 0 \ sur \  \partial \Omega$ \\
-donc on dérive l'expression et on remplace: \\
+or $\partial_x u(x,t) = 0 \ sur \  \partial \Omega$, donc on dérive l'expression et on remplace: \\
 $$ -P \sqrt{|c|} sin(x \sqrt{|c|}) + Q \sqrt{|c|} sin(x \sqrt{|c|}) = 0$$ \\
-quand $x = 0$ on a $q = 0$ et donc:\\
-$$-P \sqrt{|c|} sin(x \sqrt{|c|}) = 0 \Rightarrow \sqrt{|c|}= k \pi \ \forall k \in \mathbb{Z} $$
+
+On obtient le système de résolution suivant: 
+
+$$
+\left\{
+	\begin{array}{ll}
+		x = 0 \Leftrightarrow Q \sqrt{|c|} sin(x \sqrt{|c|}) = 0\\
+		x= 1 \Leftrightarrow -P \sqrt{|c|} sin(x \sqrt{|c|}) = 0
+
+	\end{array}
+\right. 
+$$
 
 
+$$
+\Leftrightarrow
+\left\{
+	\begin{array}{ll}
+		x = 0 \Leftrightarrow Q = 0 $$ \; car \;c < 0 $$\\
+		x= 1 \Leftrightarrow sin(x \sqrt{|c|}) = 0 $$ \; car \; P \neq 0 $$
 
-
-
-
+	\end{array}
+\right. 
+$$\\
+ On obtient ainsi: $c= (k \pi)^2 \; \forall k \in \mathbb{Z} $ \\
+La solution s'écrit donc $ u(x,t) = \lambda exp((k \pi)^2t $ , avec la condition initiale $u(0,x) = u_0 (x)$ on a alors $u_0 (x) = cos(xk \pi)$ avec $\lambda = 1$.
 
 \chapter{programmation dans un cas simplifié} 
 \section{Schémas numériques pour la résolution}
@@ -302,19 +319,18 @@ A =
 
 
 
-$$U^{n+1} = U^n(I_N - \frac{\Delta t}{ \Delta x^2} A_N)  + F^n \Delta t $$ \\
+$$U^{n+1} = (I_N - \frac{\Delta t}{ \Delta x^2} A_N)U^n  + F^n \Delta t $$ \\
 
-On obtient par transformée de Fourier en espace, la condition CFL pour la stabilité $L^2$, $\Delta t \leq \Delta x^2$.\\
+On obtient par transformée de Fourier en espace, la condition CFL pour la stabilité $L^2$, $\Delta t \leq \frac{\Delta x^2}{2}$.\\
 
+\includegraphics[scale=0.5]{./figure_1.png}\\
 
 
 \subsection{Euler implicite}
 Par le même raisonnement que pour Euler explicite, en prenant pour la dérivée en espace:\\
-\begin{equation}
-\frac{\partial ^2u}{\partial ^2x} = \frac{u(x_{i+1},t_{j+1}) - 2u(x_i,t_{j+1}) + u(x_{i-1},t_{j+1})}{\Delta x^2}
-\end{equation}
 
-$$\frac{u_{k} ^{n+1} - u_{k} ^{n}}{ \Delta t} = \frac{u_{k-1} ^{n+1} - 2u_k ^{n+1} + u_{k+1} ^{n+1}}{\Delta x^2} + f_k ^n $$
+$$ \frac{u_{k} ^{n} - u_{k} ^{n-1}}{ \Delta t} - \frac{1}{( \Delta x)^2} (a_{k+\frac{1}{2}} u_{k+1}^n -(a_{k+\frac{1}{2}} +a_{k-\frac{1}{2}}) u_k ^n + a_{k-\frac{1}{2}}u_{k-1} ^n ) = f_k ^n $$
+
 
 Enfin, l'écriture matricielle obtenue est:\\
 
@@ -346,50 +362,49 @@ Nous allons présenter dans cette partie comment nous avons travaillé en groupe
 
 
 \section{Modèle}
+\textbf{Le système linéaire du minimal model}, en dimension 1 :\\
 
-
-
-
-Le système linéaire du minimal model en dimension 1 :
 \begin{equation}
-\frac{\partial u}{\partial t}=\bigtriangledown( D \bigtriangledown U )-(J_{fi}+J_{so}+    J{si})
+\frac{\partial u}{\partial t}=\bigtriangledown( D \bigtriangledown U )-(J_{fi}+J_{so}+	J{si})
 \end{equation}
+
 \begin{equation}
 \frac{\partial v}{\partial t}=\frac{(1-H(u-\theta_v)(v_\infty -v))}{\tau_v^-}-\frac{H(u-\theta_v)v}{\theta_v^+}
 \end{equation}
+
 
 \begin{equation}
 \frac{\partial w}{\partial t}=\frac{(1-H(u-\theta_w)(w_\infty -w))}{\tau_w^-}-\frac{H(u-\theta_w)w}{\theta_w^+}
 \end{equation}
 
+
 \begin{equation}
 \frac{\partial w}{\partial t}=\frac{\frac{1+tanh(k_s(u-u_s)}{2-s}}{\tau_s}
 \end{equation}
 
+
 Avec:
+
 
 $J_si=\frac{-vH(u-\theta_v)(u-\theta_v)(u_u-u)}{\tau_{fi}}$
 
-
 $J_so=\frac{\frac{u-u_0}{1-H(U-\theta_w)}}{\tau_{so}}$
-
 
 $J_si=\frac{-H(u-\theta_w)ws}{\tau_{si}}$
 
 
-Nous avons des représentations graphiques du minimal model après un codage en ... :\\
 
+Nous avons des représentations graphiques du minimal model après un codage en python :\\
+
+Sur les quatres premières images nous avons choisit une simuation sur l'intervalle de temps : [5;6.5] ms\\
 
 
 \includegraphics[scale=0.5]{./s(t).png}\\
 \includegraphics[scale=0.5]{./s(t)_2.png}\\
-
 \includegraphics[scale=0.5]{./u(t).png}\\
 \includegraphics[scale=0.5]{./u(t)_2.png}\\
-
 \includegraphics[scale=0.5]{./v(t).png}\\
 \includegraphics[scale=0.5]{./v(t)_2.png}\\
-
 \includegraphics[scale=0.5]{./w(t).png}\\
 \includegraphics[scale=0.5]{./w(t)_2.png}\\
 
@@ -397,52 +412,81 @@ Nous avons des représentations graphiques du minimal model après un codage en 
 
 
 
-Passage en dimension 2:
+\underline{\textbf{Passage en dimension 2}}: 
 
-Dans le passage en dimension en dimension 2 on se retrouve avec (l'équation des ondes) , la variable a(x,y) devient une matrice $2*2$ .
+
+
+Dans le passage en dimension en dimension 2 on se retrouve avec (l'équation ) , la variable a(x,y) devient une matrice $2*2$ .
+
 Nous choisirons la matrice nommé A , diagonale composée de variables mesurables et positives :
+
  $\alpha(x,y)$ et $\beta(x,y)$
+
  
+
  le choix de ces  propriétés vient du fait que nous modélisons un phénomène de propagation ( du flux électrique qui travers les ventricule du cœur)
+
 
 Notre matrice A sera ainsi de cette forme là:
 
+
 \begin{equation}
 A=\begin{pmatrix}\alpha(x,y)&0\\
+
 0&\beta(x,y)\\\end{pmatrix}
  \end{equation}
 
-Nous allons essayer de trouver les solutions analytiques de cette equation de dimension 2:
+
+Nous allons essayer de trouver les solutions analytiques de cette equation de dimension 2: 
+
 \begin{equation}
 \partial{t} u -\begin{pmatrix}\partial{x} & \partial{y}
+
 \end{pmatrix} \begin{pmatrix}\alpha(x,y)&0\\
+
 0&\beta(x,y)\\\end{pmatrix} \begin{pmatrix}\partial{x}u\\
+
 \partial{y}u\\
+
 \end{pmatrix} =f(x,y)
 \end{equation}
 
+
 On développe :
+
  
+
 \begin{equation}
 \partial{t} u -\begin{pmatrix}\partial{x} & \partial{y}
+
 \end{pmatrix}\begin{pmatrix}\alpha \partial{x}U & \beta\partial{y} U
+
 \end{pmatrix}=f(x,y)
 \end{equation}
+
 Et on se retrouve avec cette equation :
+
 \begin{equation}
 \partial{t} u-\partial{x}(\alpha \partial{x}U)-\partial{y}(\beta \partial{y}U)=f(x,y)
 \end{equation}
 
+
 Avec les conditions aux bords:
-$\partial{x}(\alpha \partial{x}U)=\partial{y}(\beta \partial{y}U)=0$
-Nous allons maintenant appliquer le schéma d'Euler explicite consistant en ordre $\theta(\delta t +\delta x^2)$
+
+$\partial{x}U=\partial{y}U=0$
+
+Nous allons maintenant appliquer le schéma d'Euler explicite 
+
 \begin{equation}
 \partial{t} (U{i,j} )^n=\frac{u_{i,j}^{n+1}-u_{i,j}^n}{\delta t}
 \end{equation}
-On applique la Formule de (Trapèze) :
+
+On applique les différences finies :
+
 \begin{equation}
 (\partial{x}(\alpha \partial{x}U))_{i,j}^n=\frac{\alpha_{i+1/2}^j\partial{x}U_{i+1/2}^n-\alpha_{i-1/2}^j\partial{x}U_{i-1/2}^n}{\delta x}=\alpha_{i+1/2}^j(\frac{U_{i+1,j}^n-U_{i,j}^n}{\delta^2})-\alpha_{i-1/2}^j(\frac{U_{i,j}^n-U_{i-1,j}^n}{\delta^2})
 \end{equation}
+
 
 
 \begin{equation}
@@ -450,45 +494,61 @@ On applique la Formule de (Trapèze) :
 \end{equation}
 
 
- Idem pour les dérivées partielles par apport à y :
+
+ Idem pour les dérivées partielles par apport à y : 
+
 \begin{equation}
 \partial{y}(\beta \partial{y}U)_{i,j}^n=\frac{\beta_i^{j-1/2}}{\delta y^2}U_{i,j-1}^n+\frac{\beta_{i}^{j+1/2}-\beta_{i}^{j-1/2}}{\delta y^2}U_{i,j}^n +\frac{\beta_{i}^{j+1/2}}{\delta y^2}U_{i,j+1}^n
 \end{equation}
 
 
+
 $i=1,....,N-1$
+
 
 $j=1,....,N-1$
 
-Du coup ,
+
+Du coup , 
+
 \begin{equation}
 \partial{t} (U{i,j} )^n -\partial{y}(\beta \partial{y}U)_{i,j}^n-\partial{x}(\alpha \partial{x}U)_{i,j}^n=f_i^j
 \end{equation}
-En effet, le schéma d'Euler s'écrit :
+
+Donc on a comme schéma:
+
 \begin{equation}
-\frac{u_{i,j}^{n+1}-u_{i,j}^n}{\delta t}-\frac{\alpha_{i-1/2}^j  u_{i-1,j}^n +\beta_{i}^{j-1/2} u_{i,j-1}^{n}+ (\alpha_{i+1/2}^j - \alpha_{i-1/2}^j+ \beta_{i}^{j+1/2} -\beta_{i}^{j-1/2} ) u_{i,j}^n + \alpha_{i+1/2}^j u_{i+1,j}^{n} + \beta_{i}^{j+1/2} u_{i,j+1}^n}{h^2}
+\frac{u_{i,j}^{n+1}-u_{i,j}^n}{\delta t}-\frac{\alpha_{i-1/2}^j  u_{i-1,j}^n +\beta_{i}^{j-1/2} u_{i,j-1}^{n}+ (\alpha_{i+1/2}^j - \alpha_{i-1/2}^j+ \beta_{i}^{j+1/2} -\beta_{i}^{j-1/2} ) u_{i,j}^n + \alpha_{i+1/2}^j u_{i+1,j}^{n} + \beta_{i}^{j+1/2} u_{i,j+1}^n}{h^2}=f_{i,j}
 \end{equation}
 
-Avec les conditions aux bords :
+
+Avec les conditions aux bords : 
+
 \begin{equation}
 \partial{x}(\alpha\partial{x}u)_{0,j}^n=0
 \end{equation}
+
 
 \begin{equation}
 u_{0,j}^{n+1}=2\frac{\delta t}{\delta x^2}\alpha_{1/2}^j(u_{1,j}^n-u_{0,j}^n)f_0^j +u_{0,j}^n
 \end{equation}
 
+
 \begin{equation}
-u_{N+1,j}^{n+1}=u_{N,j}^{n}+2\frac{\delta t}{\delta x} \alpha_{N-1/2}^j U_{N-1,j}^n-2\frac{\delta t}{\delta x} \alpha_{N-1/2}^j U_{N,j}^n +f_N^j
+u_{N,j}^{n+1}=u_{N,j}^{n}+2\frac{\delta t}{\delta x} \alpha_{N-1/2}^j U_{N-1,j}^n-2\frac{\delta t}{\delta x} \alpha_{N-1/2}^j U_{N,j}^n +f_N^j
 \end{equation}
+
 
 \begin{equation}
 u_{i,N}^{n+1}=u_{i,N}^{n}+2\frac{\delta t}{\delta x} \beta_{i}^{N-1/2} U_{i,N-1}^n-2\frac{\delta t}{\delta x} \beta_{i}^{N-1/2} U_{i,N}^n +f_i^N
 \end{equation}
 
+
 \begin{equation}
 u_{i,0}^{n+1}=\frac{\delta t}{\delta x} \beta_{i}^{1/2}(U_{j,1}^n-U_{i,0}^n)j_j^0+U_{i,0}^n
 \end{equation}
 
-(les conditions Cfl )
+
+Pour coder, on pose A comme étant la matrice identité, et on fait une discrétisation uniforme  en espace $\delta x= \delta y = h$
+
 \end{document}
